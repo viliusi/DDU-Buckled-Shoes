@@ -23,12 +23,3 @@
   </style>
 </head>
 
-<body>
-
-<div class="jumbotron text-center" style="margin-bottom:0">
-  <h1>My First <?php appName(); ?></h1>
-  <p>Resize this responsive page to see the effect!</p>
-  <?php if ($user->isLoggedIn()) : ?>
-    <h3 align="right">Hello, <?php echo $user->data()->name; ?></h3>
-  <?php endif; ?>
-</div>
