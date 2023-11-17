@@ -6,11 +6,6 @@ if (Input::exists()) {
         $validate = new Validation();
 
         $validation = $validate->check($_POST, array(
-            'name' => array(
-                'required' => true,
-                'min' => 2,
-                'max' => 50
-            ),
 
             'username' => array(
                 'required' => true,
@@ -35,7 +30,6 @@ if (Input::exists()) {
                 $user->create(array(
                     'username'  => Input::get('username'),
                     'password'  => Password::hash(Input::get('password')),
-                    'name'      => Input::get('name')
                 ));
                 Session::flash('register-success', 'Thanks for registering! You can login now.');
                 Redirect::to('index.php');

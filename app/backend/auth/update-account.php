@@ -6,11 +6,6 @@ if (Input::exists()) {
         $validate = new Validation();
 
         $validation = $validate->check($_POST, array(
-            'name'  => array(
-                'required'  => true,
-                'min'       => 2,
-                'max'       => 50
-            ),
             'username'  => array(
                 'required'  => true,
                 'min'       => 2,
@@ -38,7 +33,6 @@ if (Input::exists()) {
         if ($validation->passed()) {
             try {
                 $user->update(array(
-                    'name'  => Input::get('name'),
                     'username'  => Input::get('username'),
                 ));
 
