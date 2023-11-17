@@ -3,10 +3,11 @@
 class User
 {
     private $_db,
-            $_data,
-            $_sessionName,
-            $_cookieName,
-            $_isLoggedIn;
+    $_data,
+    $_sessionName,
+    $_cookieName,
+    $_isLoggedIn,
+    $_isAdmin;
 
     public function __construct($user = null)
     {
@@ -14,58 +15,58 @@ class User
 
         $this->_sessionName = Config::get('session/session_name');
 
-        $this->_cookieName  = Config::get('remember/cookie_name');
+        $this->_cookieName = Config::get('remember/cookie_name');
 
-        if (! $user)
-        {
-            if (Session::exists($this->_sessionName))
-            {
+        if (!$user) {
+            if (Session::exists($this->_sessionName)) {
                 $user = Session::get($this->_sessionName);
 
-                if ($this->find($user))
-                {
+                if ($this->find($user)) {
                     $this->_isLoggedIn = true;
                 }
             }
 
-        }
-        else
-        {
+        } else {
             $this->find($user);
+        }
+
+        if ($this->isLoggedIn()) {
+            if ($user->is_admin == 1) {
+                $this->_isAdmin = true;
+            } else {
+                $this->_isAdmin = false;
+            }
+        } else {
+        $this->_isAdmin = false;
         }
     }
 
     public function update($fields = array(), $id = null)
     {
-        if (!$id && $this->isLoggedIn())
-        {
+        if (!$id && $this->isLoggedIn()) {
             $id = $this->data()->user_id;
         }
 
-        if (!$this->_db->update('users', 'user_id', $id, $fields))
-        {
+        if (!$this->_db->update('users', 'user_id', $id, $fields)) {
             throw new Exception('Unable to update the user.');
         }
     }
 
     public function create($fields = array())
     {
-        if (!$this->_db->insert('users', $fields))
-        {
+        if (!$this->_db->insert('users', $fields)) {
             throw new Exception("Unable to create the user.");
         }
     }
 
     public function find($user = null)
     {
-        if ($user)
-        {
-            $field  = (is_numeric($user)) ? 'user_id' : 'username';
+        if ($user) {
+            $field = (is_numeric($user)) ? 'user_id' : 'username';
 
             $data = $this->_db->get('users', array($field, '=', $user));
 
-            if ($data->count())
-            {
+            if ($data->count()) {
                 $this->_data = $data->first();
                 return true;
             }
@@ -74,34 +75,26 @@ class User
 
     public function login($username = null, $password = null, $remember = false)
     {
-        if (! $username && ! $password && $this->exists())
-        {
+        if (!$username && !$password && $this->exists()) {
             Session::put($this->_sessionName, $this->data()->user_id);
-        }
-        else
-        {
+        } else {
             $user = $this->find($username);
 
-            if ($user)
-            {
-                if (Password::check($password, $this->data()->password))
-                {
+            if ($user) {
+                if (Password::check($password, $this->data()->password)) {
                     Session::put($this->_sessionName, $this->data()->user_id);
 
-                    if ($remember)
-                    {
-                        $hash       = Hash::unique();
-                        $hashCheck  = $this->_db->get('users_sessions', array('user_id', '=', $this->data()->user_id));
+                    if ($remember) {
+                        $hash = Hash::unique();
+                        $hashCheck = $this->_db->get('users_sessions', array('user_id', '=', $this->data()->user_id));
 
-                        if (!$hashCheck->count())
-                        {
+                        if (!$hashCheck->count()) {
                             $this->_db->insert('users_sessions', array(
-                                'user_id'   => $this->data()->user_id,
-                                'hash'      => $hash
-                            ));
-                        }
-                        else
-                        {
+                                'user_id' => $this->data()->user_id,
+                                'hash' => $hash
+                            )
+                            );
+                        } else {
                             $hash = $hashCheck->first()->hash;
                         }
 
@@ -120,12 +113,10 @@ class User
     {
         $group = $this->_db->get('groups', array('group_id', '=', $this->data()->groups));
 
-        if  ($group->count())
-        {
+        if ($group->count()) {
             $permissions = json_decode($group->first()->permissions, true);
 
-            if ($permissions[$key] == true)
-            {
+            if ($permissions[$key] == true) {
                 return true;
             }
         }
@@ -156,15 +147,18 @@ class User
         return $this->_isLoggedIn;
     }
 
+    public function isAdmin()
+    {
+        return $this->_isAdmin;
+    }
+
     public function deleteMe()
     {
-        if ($this->isLoggedIn())
-        {
+        if ($this->isLoggedIn()) {
             $id = $this->data()->user_id;
         }
 
-        if (!$this->_db->delete('users', array('user_id', '=', $id)))
-        {
+        if (!$this->_db->delete('users', array('user_id', '=', $id))) {
             throw new Exception('Unable to update the user.');
         }
     }
