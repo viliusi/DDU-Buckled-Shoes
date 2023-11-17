@@ -12,10 +12,6 @@
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
-                        <td>Name :</td>
-                        <td><?php echo escape($data->name); ?></td>
-                      </tr>
-                      <tr>
                         <td>Username :</td>
                         <td><?php echo escape($data->username); ?></td>
                       </tr>
