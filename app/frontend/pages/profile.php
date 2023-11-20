@@ -8,7 +8,7 @@
             </div>
             <div class="panel-body">
               <div class="row">
-                <div class=" col-md-12 col-lg-12 ">
+                <div class=" col-md-9 col-lg-9 ">
                   <table class="table table-user-information">
                     <tbody>
                       <tr>
@@ -22,7 +22,6 @@
                     </tbody>
                   </table>
                   <a href="update-account.php" class="btn btn-primary">Update Information</a>
-                  <a href="index.php" class="btn btn-primary">Back</a>
                   <a href="delete-account.php" class="btn btn-danger">Delete Account</a>
                   <a href="logout.php" class="btn btn-danger">Logout</a>
                 </div>

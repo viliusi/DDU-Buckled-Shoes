@@ -28,8 +28,6 @@ class User
         } else {
             $this->find($user);
         }
-
-        $this->_data = $this->_db->select('users', array('user_id', '=', $user))->first();
     }
 
     public function update($fields = array(), $id = null)
@@ -139,9 +137,16 @@ class User
     }
 
     public function isAdmin()
-    {
-        
+{
+    if ($this->isLoggedIn()) {
+        $userData = $this->data();
+        if (property_exists($userData, 'is_admin') && $userData->is_admin == 1) {
+            return true;
+        }
     }
+
+    return false;
+}
 
     public function deleteMe()
     {
