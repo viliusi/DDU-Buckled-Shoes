@@ -6,8 +6,7 @@ class User
     $_data,
     $_sessionName,
     $_cookieName,
-    $_isLoggedIn,
-    $_isAdmin;
+    $_isLoggedIn;
 
     public function __construct($user = null)
     {
@@ -30,15 +29,7 @@ class User
             $this->find($user);
         }
 
-        if ($this->isLoggedIn()) {
-            if ($user->is_admin == 1) {
-                $this->_isAdmin = true;
-            } else {
-                $this->_isAdmin = false;
-            }
-        } else {
-        $this->_isAdmin = false;
-        }
+        $this->_data = $this->_db->select('users', array('user_id', '=', $user))->first();
     }
 
     public function update($fields = array(), $id = null)
@@ -149,7 +140,7 @@ class User
 
     public function isAdmin()
     {
-        return $this->_isAdmin;
+        
     }
 
     public function deleteMe()

@@ -1,6 +1,6 @@
 <?php
 
-$remoteSecret = parse_ini_file('yourSecrets.ini');
+$remoteSecret = parse_ini_file('../yourSecrets.ini');
 
 $current = $remoteSecret;
 
