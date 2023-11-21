@@ -7,10 +7,10 @@
     <ul class="navbar-nav">
       <?php if ($user->isLoggedIn()) : ?>
         <li class="nav-item">
-          <a class="nav-link" href="index.php">Shoes</a>
+          <a class="nav-link" href="shoes.php">Shoes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="index.php">Accessories</a>
+          <a class="nav-link" href="accessories.php">Accessories</a>
         </li>
       <?php endif; ?>
     </ul>
@@ -32,10 +32,10 @@
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="index.php">Shoes</a>
+            <a class="nav-link" href="shoes.php">Shoes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.php">Accessories</a>
+            <a class="nav-link" href="accessories.php">Accessories</a>
           </li>
           </li>
         </ul>
