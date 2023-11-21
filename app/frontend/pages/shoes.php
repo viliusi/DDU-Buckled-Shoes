@@ -1,9 +1,10 @@
 <div>
   <h2>Shoes</h2>
+  <br>
   </div>
   <div class="row">
     <div class="col-sm-4">
-      <h3>Clasic</h3>
+      <h3>Classic</h3>
       <p>Shoe 1 image</p>
       <p>Shoe 1 price</p>
     </div>

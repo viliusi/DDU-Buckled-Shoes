@@ -1,5 +1,6 @@
 <div>
   <h2>Accessories</h2>
+  <br>
   </div>
   <div class="row">
     <div class="col-sm-4">
