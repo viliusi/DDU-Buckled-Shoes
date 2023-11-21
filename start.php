@@ -8,3 +8,4 @@ define('FRONTEND_MANAGEMENT','app/frontend/pages/management/');
 define('FRONTEND_INCLUDE', 'app/frontend/includes/');
 define('FRONTEND_INCLUDE_ERROR', 'app/frontend/includes/errors/');
 define('FRONTEND_ASSET', 'app/frontend/assets/');
+
