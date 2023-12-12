@@ -1,40 +1,26 @@
-<div>
-  <h2>Shoes</h2>
-  <br>
-  </div>
-  <div class="row">
-    <div class="col-sm-4">
-    <a href="classic.php">
-      <h3>Classic</h3>
-      <p>Shoe 1 image</p>
-      <p>Shoe 1 price</p>
+<?php
+if (isset($_GET['id'])) {
+    // Display the product with the ID that is set in the URL
+    $product = Database::getInstance()->query("SELECT * FROM products WHERE id = {$_GET['id']}")->results();
+} else {
+    // Display all products
+    $product = Database::getInstance()->query("SELECT * FROM products")->results();
+}
+?>
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="container" style="margin-top:30px">
+        <h2>Product</h2>
+        <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
+            <li style="margin: 10px; padding: 10px; border: 1px solid #000;">
+                <?php echo "{$product[0]['name']} - {$product[0]['price']} DKK"; ?>
+                <form method="post">
+                    <input type="hidden" name="product_id" value="<?= $product[0]['id']; ?>">
+                    <input type="submit" name="add_to_cart" value="Add to cart">
+                </form>
+            </li>
+        </ul>
     </div>
-    <div class="col-sm-4">
-    <a href="classic.php">
-      <h3>Wheele</h3>
-      <p>Shoe 2 image</p>
-      <p>Shoe 2 price</p>
-    </div>
-    <div class="col-sm-4">
-    <a href="classic.php">
-      <h3>MOON-E</h3>
-      <p>Shoe 3 image</p>
-      <p>Shoe 3 price</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-4">
-    <a href="classic.php">
-      <h3>WhimsiQuirk</h3>
-      <p>Shoe 4 image</p>
-      <p>Shoe 4 price</p>
-    </div>
-    <div class="col-sm-4">
-    <a href="classic.php">
-      <h3>😍Stompers</h3>
-      <p>Shoe 5 image</p>
-      <p>Shoe 5 price</p>
-    </div>
-    </div>
-  </div>
-</div>
+</body>
+</html>
