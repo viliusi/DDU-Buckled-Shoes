@@ -9,25 +9,30 @@ class Product
         }
     }
 
-    public static function edit($product_id, $name, $description, $price, $category)
+    public static function edit($fields = array(), $product_id)
     {
-        $fields = array(
-            'product_id' => $product_id,
-            'name' => $name,
-            'description' => $description,
-            'price' => $price,
-            'category' => $category
-        );
-        $where = array(
-            'field' => 'product_id',
-            'operator' => '=',
-            'value' => $product_id
-        );
-        if (!Database::getInstance()->update('products', $fields, $where)) {
-            throw new Exception("Unable to edit the product.");
+        if (!$product_id && $product_id != 0) {
+            throw new Exception('Missing product ID');
         }
-        
-        Redirect::to('management-products.php');
+    
+        $db = Database::getInstance();
+    
+        if (!$db->update('products', 'product_id', $product_id, $fields)) {
+            throw new Exception('There was a problem updating the product.');
+        }
+    }
+
+    public static function delete($product_id)
+    {
+        if (!$product_id && $product_id != 0) {
+            throw new Exception('Missing product ID');
+        }
+    
+        $db = Database::getInstance();
+    
+        if (!$db->delete('products', array('product_id', '=', $product_id))) {
+            throw new Exception('There was a problem deleting the product.');
+        }
     }
 
     public static function getAllProducts()

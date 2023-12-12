@@ -133,28 +133,28 @@ class Database
 
     public function update($table, $where, $id, $fields) //#TODO: Why is it hard-coded to user_id?
     {
-        $set    = '';
-        $x      = 1;
-
+        $set = '';
+        $x = 1;
+    
         foreach ($fields as $name => $value)
         {
             $set .= "{$name} = ?";
-
+    
             if ($x < count($fields))
             {
                 $set .= ', ';
             }
-
+    
             $x++;
         }
-
-        $sql = "UPDATE {$table} SET {$set} WHERE {$where} = {$id}";
-
-        if (!$this->query($sql, $fields)->error())
+    
+        $sql = "UPDATE {$table} SET {$set} WHERE {$where} = ?";
+    
+        if (!$this->query($sql, array_merge(array_values($fields), array($id)))->error())
         {
             return true;
         }
-
+    
         return false;
     }
 

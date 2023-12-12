@@ -1,6 +1,23 @@
 <div class="container" style="margin-top:30px">
     <h2>Edit Product</h2>
 
+    <br>
+    <form method="post">
+        <input type="submit" name="delete" id="test" value="Delete Product" /><br />
+    </form>
+
+    <?php
+
+    function testfun()
+    {
+        Product::delete($_GET['product_id']);
+        Redirect::to('management-products.php');
+    }
+    if (array_key_exists('delete', $_POST)) {
+        testfun();
+    }
+    ?>
+
     <?php
     if (isset($_GET['product_id']))
         $product = Product::getProductById($_GET['product_id']);
@@ -21,7 +38,7 @@
     <h4>Update info:</h4>
 
     <form action="management-edit-products.php" method="post">
-    <input type="hidden" name="product_id" value="<?php echo $product->product_id ?>">
+        <input type="hidden" name="product_id" value="<?php echo $product->product_id ?>">
         <div class="form-group">
             <label for="name">Name :</label> <br>
             <input type="text" name="name" id="name" value="<?php echo $product->name ?>">

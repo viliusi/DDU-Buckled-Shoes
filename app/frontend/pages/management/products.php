@@ -1,6 +1,8 @@
 <div class="container" style="margin-top:30px">
   <h2>Product Management</h2>
-
+  <br>
+  <button><a href="management-add-products.php">Add</a></button> 
+  <br> <br>
   <?php 
   $products = Product::getAllProducts();
   if ($products->count()) {
@@ -24,8 +26,8 @@
       echo "<td>" . $product->description . "</td>";
       echo "<td><a href='management-edit-products.php?product_id=" . $product->product_id . "'>Edit</a></td>";
       echo "</tr>";
-      echo "</table>";
     }
+    echo "</table>";
   } else {
     echo "No products found.";
   }

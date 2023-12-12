@@ -34,14 +34,14 @@ if (Input::exists()) {
 
         if ($validate->passed()) {
             try {
-                Product::edit(array(
+                Product::create(array(
                     'name' => Input::get('name'),
                     'description' => Input::get('description'),
                     'price' => Input::get('price'),
                     'category' => Input::get('category'),
-                ), Input::get('product_id'));
+                ));
 
-                Session::flash('create-post-success', 'Thanks for producting.');
+                Session::flash('create-post-success', 'Thanks for adding product.');
                 Redirect::to('management-products.php');
             } catch (Exception $e) {
                 die($e->getMessage());

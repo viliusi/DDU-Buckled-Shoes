@@ -78,10 +78,12 @@ class User
                         $hashCheck = $this->_db->get('users_sessions', array('user_id', '=', $this->data()->user_id));
 
                         if (!$hashCheck->count()) {
-                            $this->_db->insert('users_sessions', array(
-                                'user_id' => $this->data()->user_id,
-                                'hash' => $hash
-                            )
+                            $this->_db->insert(
+                                'users_sessions',
+                                array(
+                                    'user_id' => $this->data()->user_id,
+                                    'hash' => $hash
+                                )
                             );
                         } else {
                             $hash = $hashCheck->first()->hash;
@@ -137,16 +139,16 @@ class User
     }
 
     public function isAdmin()
-{
-    if ($this->isLoggedIn()) {
-        $userData = $this->data();
-        if (property_exists($userData, 'is_admin') && $userData->is_admin == 1) {
-            return true;
+    {
+        if ($this->isLoggedIn()) {
+            $userData = $this->data();
+            if (property_exists($userData, 'is_admin') && $userData->is_admin == 1) {
+                return true;
+            }
         }
-    }
 
-    return false;
-}
+        return false;
+    }
 
     public function deleteMe()
     {
@@ -156,6 +158,29 @@ class User
 
         if (!$this->_db->delete('users', array('user_id', '=', $id))) {
             throw new Exception('Unable to update the user.');
+        }
+    }
+
+    public static function getAllUsers()
+    {
+        $users = Database::getInstance()->query("SELECT * FROM users ORDER BY user_id ASC");
+        //return list of users
+        return $users;
+    }
+
+    public static function switchAdminState($user_id)
+    {
+        $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
+        $is_admin = $user->first()->is_admin;
+        if ($is_admin == 1) {
+            $is_admin = 0;
+        } else {
+            $is_admin = 1;
+        }
+        $fields = array('is_admin' => $is_admin);
+        $db = Database::getInstance();
+        if (!$db->update('users', 'user_id', $user_id, $fields)) {
+            throw new Exception('There was a problem updating the user.');
         }
     }
 }

@@ -19,5 +19,9 @@
                 <a class="nav-link" href="management-reviews.php">Reviews</a>
             </li>
         </ul>
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.php">Back to public site</a>
+        </li>
     </div>
 </nav>
