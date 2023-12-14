@@ -1,5 +1,5 @@
 <?php
-$products = Database::getInstance()->query("SELECT * FROM products WHERE product_id BETWEEN 3 AND 7")->results();
+$products = Database::getInstance()->query("SELECT * FROM products WHERE Category = 'shoe'")->results();
 if ($products) {
     foreach ($products as $key => $product) {
         $products[$key] = get_object_vars($product);
@@ -14,8 +14,8 @@ if ($products) {
         <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
             <?php foreach ($products as $product): ?>
             <li style="margin: 10px; padding: 10px; border: 1px solid #000;">
-                <a href="index.php?product_id=<?= $product['product_id']; ?>">
-                    <?php echo "{$product['name']} - {$product['price']} DKK"; ?>
+                <a href="product.php?product_id=<?= $product['product_id']; ?>">
+                    <?php echo "{$product['name']} - $" . "{$product['price']}"; ?>
                 </a>
                 <form method="post">
                     <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">

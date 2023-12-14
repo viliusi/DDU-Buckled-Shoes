@@ -1,40 +1,28 @@
-<div>
-  <h2>Accessories</h2>
-  <br>
-  </div>
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Hoodie</h3>
-      <p>Shoe 1 image</p>
-      <p>Shoe 1 price</p>
+<?php
+$products = Database::getInstance()->query("SELECT * FROM products WHERE Category = 'accessory'")->results();
+if ($products) {
+    foreach ($products as $key => $product) {
+        $products[$key] = get_object_vars($product);
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="container" style="margin-top:30px">
+        <h2>Accessories</h2>
+        <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
+            <?php foreach ($products as $product): ?>
+            <li style="margin: 10px; padding: 10px; border: 1px solid #000;">
+                <a href="product.php?product_id=<?= $product['product_id']; ?>">
+                    <?php echo "{$product['name']} - $" . "{$product['price']}"; ?>
+                </a>
+                <form method="post">
+                    <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">
+                </form>
+            </li>
+            <?php endforeach; ?>
+        </ul>
     </div>
-    <div class="col-sm-4">
-      <h3>Double buck</h3>
-      <p>Shoe 2 image</p>
-      <p>Shoe 2 price</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Scocks</h3>
-      <p>Shoe 3 image</p>
-      <p>Shoe 3 price</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>🧢Cap🧢</h3>
-      <p>Shoe 4 image</p>
-      <p>Shoe 4 price</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Skirt</h3>
-      <p>Shoe 5 image</p>
-      <p>Shoe 5 price</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Wallet</h3>
-      <p>Shoe 6 image</p>
-      <p>Shoe 6 price</p>
-     </div>
-    </div>
-  </div>
-</div>
+</body>
+</html>
