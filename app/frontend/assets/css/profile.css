@@ -29,5 +29,15 @@
     border-top: 0;
 }
 .toppad
-{margin-top:20px;
+{
+    margin-top:20px;
+}
+
+h2{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.product-page{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
