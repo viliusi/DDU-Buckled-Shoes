@@ -3,10 +3,10 @@
 class User
 {
     private $_db,
-    $_data,
-    $_sessionName,
-    $_cookieName,
-    $_isLoggedIn;
+        $_data,
+        $_sessionName,
+        $_cookieName,
+        $_isLoggedIn;
 
     public function __construct($user = null)
     {
@@ -24,7 +24,6 @@ class User
                     $this->_isLoggedIn = true;
                 }
             }
-
         } else {
             $this->find($user);
         }
@@ -168,19 +167,24 @@ class User
         return $users;
     }
 
+    public static function getUserById($user_id)
+    {
+        $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
+        return $user->first();
+    }
+
     public static function switchAdminState($user_id)
     {
         $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
-        $is_admin = $user->first()->is_admin;
+        $user = $user->first();
+
+        $is_admin = $user->is_admin;
         if ($is_admin == 1) {
             $is_admin = 0;
         } else {
             $is_admin = 1;
         }
-        $fields = array('is_admin' => $is_admin);
-        $db = Database::getInstance();
-        if (!$db->update('users', 'user_id', $user_id, $fields)) {
-            throw new Exception('There was a problem updating the user.');
-        }
+
+        Database::getInstance()->update('users', 'user_id', $user_id, array('is_admin' => $is_admin));
     }
 }

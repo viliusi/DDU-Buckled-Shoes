@@ -1,7 +1,7 @@
 <div class="container" style="margin-top:30px">
   <h2>Users</h2>
 
-  <?php 
+  <?php
   $users = User::getAllUsers();
   if ($users->count()) {
     echo $users->count() . " users found.";
@@ -24,24 +24,24 @@
       echo "<td>" . $user->last_updated . "</td>";
       echo "<td>" . "<form method=\"post\">
       <input type=\"hidden\" name=\"user_id\" value=\"<?php echo $user->user_id ?>\">
-      <input type=\"submit\" name=\"switch state\" id=\"test\" value=\"Switch State\" />
+      <input type=\"submit\" name=\"switch state\" id=\"test\" value=\"switch state\" />
       <br /></form>"
-       . "</td>";
+        . "</td>";
       echo "</tr>";
     }
     echo "</table>";
   } else {
     echo "No users found.";
   }
-    
-    function switchAdminState($user_id)
-    {
-        User::switchAdminState($user_id);
-        Redirect::to('management-users.php');
-    }
-    if (array_key_exists('switch state', $_POST)) {
-        $user_id = $_POST['user_id'];  
-        switchAdminState($user_id);
-    }
+
+  function switchState($user_id)
+  {
+    User::switchAdminState($user_id);
+    Redirect::to('management-users.php');
+  }
+  if (array_key_exists('switch state', $_POST)) {
+    switchState($_POST['user_id']);
+  }
+
   ?>
 </div>

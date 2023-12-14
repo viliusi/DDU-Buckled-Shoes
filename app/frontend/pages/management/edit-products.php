@@ -8,13 +8,13 @@
 
     <?php
 
-    function testfun()
+    function delete()
     {
         Product::delete($_GET['product_id']);
         Redirect::to('management-products.php');
     }
     if (array_key_exists('delete', $_POST)) {
-        testfun();
+        delete();
     }
     ?>
 
@@ -22,7 +22,9 @@
     if (isset($_GET['product_id']))
         $product = Product::getProductById($_GET['product_id']);
     ?>
+
     <br>
+    
     <h4>Current info:</h4>
     <li style="font-weight: bold">ID:</li>
     <?php echo $product->product_id ?>
@@ -34,6 +36,8 @@
     <?php echo $product->price ?>
     <li style="font-weight: bold">Category: </li>
     <?php echo $product->category ?>
+
+    <br> <br>
 
     <h4>Update info:</h4>
 
