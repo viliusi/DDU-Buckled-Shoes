@@ -14,6 +14,7 @@
     echo "<th>Price</th>";
     echo "<th>Category</th>";
     echo "<th>Description</th>";
+    echo "<th>Images_Reference</th>";
     echo "<th>Edit</th>";
     echo "</tr>";
     foreach ($products->results() as $product) {
@@ -24,6 +25,7 @@
       echo "<td>" . $product->price . "</td>";
       echo "<td>" . $product->category . "</td>";
       echo "<td>" . $product->description . "</td>";
+      echo "<td>" . $product->images_reference . "</td>";
       echo "<td><a href='management-edit-products.php?product_id=" . $product->product_id . "'>Edit</a></td>";
       echo "</tr>";
     }

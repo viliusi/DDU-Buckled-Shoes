@@ -177,7 +177,7 @@ class User
     {
         $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
         $user = $user->first();
-
+        
         $is_admin = $user->is_admin;
         if ($is_admin == 1) {
             $is_admin = 0;
@@ -185,6 +185,9 @@ class User
             $is_admin = 1;
         }
 
-        Database::getInstance()->update('users', 'user_id', $user_id, array('is_admin' => $is_admin));
+        $db = Database::getInstance();
+        if (!$db->update('users', 'user_id', $user_id, array('is_admin' => $is_admin))) {
+            throw new Exception('There was a problem updating the user.');
+        }
     }
 }

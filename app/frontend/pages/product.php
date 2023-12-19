@@ -1,7 +1,7 @@
 <?php
-  $product_id = $_GET['product_id'];
+$product_id = $_GET['product_id'];
 
-  $product = Product::getProductById($product_id);
+$product = Product::getProductById($product_id);
 ?>
 
 <div class="container" style="margin-top:30px">
@@ -16,9 +16,19 @@
       <form action="cart.php" method="post">
         <input type="hidden" name="product_id" value="<?php echo $product->product_id ?>">
         <input type="submit" name="add_to_cart" value="Add to Cart">
-        
+
       </form>
     </div>
- 
+  </div>
+
+  <?php
+
+  $images = Product::getImagesByProductId($product_id);
+
+  foreach ($images->results() as $image) {
+    echo "<img src='" . $image->image_location . "' width='200' height='200'>" . "<br>";
+  }
+
+  ?>
 
 </div>

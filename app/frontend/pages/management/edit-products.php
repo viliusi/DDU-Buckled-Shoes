@@ -24,7 +24,7 @@
     ?>
 
     <br>
-    
+
     <h4>Current info:</h4>
     <li style="font-weight: bold">ID:</li>
     <?php echo $product->product_id ?>
@@ -36,6 +36,18 @@
     <?php echo $product->price ?>
     <li style="font-weight: bold">Category: </li>
     <?php echo $product->category ?>
+    <li style="font-weight: bold">Images_Reference:></li>
+    <?php echo $product->images_reference ?>
+
+    <br>
+
+    <?php
+    $images = Product::getImagesByProductId($product->product_id);
+
+    foreach ($images->results() as $image) {
+        echo "<img src='" . $image->image_location . "' width='200' height='200'>";
+    }
+    ?>
 
     <br> <br>
 
@@ -58,6 +70,10 @@
         <div class="form-group">
             <label for="category">Category :</label> <br>
             <input type="text" name="category" id="category" value="<?php echo $product->category ?>">
+        </div>
+        <div class="form-group">
+            <label for="images_reference">Images_Reference :</label> <br>
+            <input type="text" name="images_reference" id="images_reference" value="<?php echo $product->images_reference ?>">
         </div>
         <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
         <input type="submit" value="Update">

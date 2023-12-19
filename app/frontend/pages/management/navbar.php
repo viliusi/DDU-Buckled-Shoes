@@ -18,6 +18,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="management-reviews.php">Reviews</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="management-images.php">Images</a>
+            </li>
         </ul>
         <ul class="navbar-nav ml-auto">
         <li class="nav-item">

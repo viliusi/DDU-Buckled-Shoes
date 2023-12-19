@@ -20,6 +20,10 @@
             <label for="category">Category :</label> <br>
             <input type="text" name="category" id="category" value="">
         </div>
+        <div class="form-group">
+            <label for="images_reference">Images_Reference :</label> <br>
+            <input type="text" name="images_reference" id="images_reference" value="">
+        </div>
         <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
-        <input type="submit" value="Update">
+        <input type="submit" value="Add">
 </div>

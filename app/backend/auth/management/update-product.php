@@ -30,6 +30,12 @@ if (Input::exists()) {
                 'min' => 2,
                 'max' => 10,
             ),
+
+            'images_reference' => array(
+                'required' => true,
+                'min' => 1,
+                'max' => 128,
+            ),
         ));
 
         if ($validate->passed()) {
@@ -39,6 +45,7 @@ if (Input::exists()) {
                     'description' => Input::get('description'),
                     'price' => Input::get('price'),
                     'category' => Input::get('category'),
+                    'images_reference' => Input::get('images_reference'),
                 ), Input::get('product_id'));
 
                 Session::flash('create-post-success', 'Thanks for producting.');

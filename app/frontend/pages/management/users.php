@@ -22,25 +22,12 @@
       echo "<td>" . $user->username . "</td>";
       echo "<td>" . $user->joined . "</td>";
       echo "<td>" . $user->last_updated . "</td>";
-      echo "<td>" . "<form method=\"post\">
-      <input type=\"hidden\" name=\"user_id\" value=\"<?php echo $user->user_id ?>\">
-      <input type=\"submit\" name=\"switch state\" id=\"test\" value=\"switch state\" />
-      <br /></form>"
-        . "</td>";
+      echo "<td><a href='management-admin-user.php?user_id=" . $user->user_id . "'>Switch State</a></td>";
       echo "</tr>";
     }
     echo "</table>";
   } else {
     echo "No users found.";
-  }
-
-  function switchState($user_id)
-  {
-    User::switchAdminState($user_id);
-    Redirect::to('management-users.php');
-  }
-  if (array_key_exists('switch state', $_POST)) {
-    switchState($_POST['user_id']);
   }
 
   ?>
