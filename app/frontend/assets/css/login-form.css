@@ -1,5 +1,6 @@
-body {
+.body {
   padding-top: 90px;
+  color: #029f5b;
 }
 
 .panel-login {

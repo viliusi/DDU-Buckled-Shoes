@@ -4,7 +4,7 @@ $product_id = $_GET['product_id'];
 $product = Product::getProductById($product_id);
 ?>
 
-<div class="container" style="margin-top:30px">
+<div class="split" style="margin-top:30px">
   <h2><?php echo $product->name ?></h2>
   <div class="row">
     <div class="col-sm-4">

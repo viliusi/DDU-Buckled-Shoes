@@ -33,11 +33,14 @@
     margin-top:20px;
 }
 
-h2{
+.h2{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .product-page{
     margin-top: 20px;
     margin-bottom: 20px;
+}
+.split {
+    background: linear-gradient(to right, blue 50%, white 50%);
 }
