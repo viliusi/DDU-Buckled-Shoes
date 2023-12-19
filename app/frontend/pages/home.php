@@ -1,4 +1,12 @@
 <div class="container" style="margin-top:30px">
+
+<div class="slider">
+  <div class="sliderwrapper">
+    <div class="sliderItem"><img src="https://via.placeholder.com/350x150">
+  </div>
+  </div>
+</div>
+
   <h2>Lorem ipsum</h2>
 
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et dui tempus, tempus lacus sit amet, rhoncus lacus.
