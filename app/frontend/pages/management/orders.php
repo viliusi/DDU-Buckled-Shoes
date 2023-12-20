@@ -9,7 +9,7 @@
     echo "<tr>";
     echo "<th>Order_id</th>";
     echo "<th>Products</th>";
-    echo "<th>Price</th>";
+    echo "<th>Username</th>";
     echo "<th>Details</th>";
     echo "</tr>";
     foreach ($orders->results() as $order) {
@@ -17,7 +17,7 @@
       echo "<tr>";
       echo "<td>" . $order->order_id . "</td>";
       echo "<td>" . $order->products . "</td>";
-      echo "<td>" . $order->price . "</td>";
+      echo "<td>" . User::getUserById($order->user_id)->username . "</td>";
       echo "<td><a href='management-order-details.php?order_id=" . $order->order_id . "'>Details</a></td>";
       echo "</tr>";
     }
