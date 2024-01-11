@@ -9,7 +9,10 @@
     echo "<tr>";
     echo "<th>User ID</th>";
     echo "<th>Is admin?</th>";
+    echo "<th>Is verified?</th>";
+    echo "<th>Verification code</th>";
     echo "<th>Username</th>";
+    echo "<th>Email</th>";
     echo "<th>Joined</th>";
     echo "<th>Last updated</th>";
     echo "<th>Switch admin state</th>";
@@ -19,7 +22,10 @@
       echo "<tr>";
       echo "<td>" . $user->user_id . "</td>";
       echo "<td>" . $user->is_admin . "</td>";
+      echo "<td>" . $user->is_verified . "</td>";
+      echo "<td>" . $user->verification_code . "</td>";
       echo "<td>" . $user->username . "</td>";
+      echo "<td>" . $user->email . "</td>";
       echo "<td>" . $user->joined . "</td>";
       echo "<td>" . $user->last_updated . "</td>";
       echo "<td><a href='management-admin-user.php?user_id=" . $user->user_id . "'>Switch State</a></td>";

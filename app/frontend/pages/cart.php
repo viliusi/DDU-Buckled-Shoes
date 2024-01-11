@@ -10,38 +10,28 @@
   }
 
  // Add product to cart, increase or decrease quantity
-if (isset($_POST['add_to_cart'])) {
-    $product_id = $_POST['product_id'];
-    $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1; // Default to 1 if 'quantity' is not set
+ if (isset($_POST['add_to_cart'])) {
+  $product_id = $_POST['product_id'];
+  $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1; // Default to 1 if 'quantity' is not set
 
-    // Check if the product already exists in the cart
-    $product_exists_in_cart = false;
-    foreach ($_SESSION['cart'] as &$item) {
-        if ($item['product_id'] == $product_id) {
-            // If the product exists, increase or decrease its quantity
-            $item['quantity'] += $quantity;
-            $product_exists_in_cart = true;
-            // If quantity is 0 or less, remove the product from the cart
-            if ($item['quantity'] <= 0) {
-                unset($_SESSION['cart'][$key]);
-            }
-            break;
-        }
-    }
+  // Check if the product already exists in the cart
+  $product_exists_in_cart = false;
+  foreach ($_SESSION['cart'] as $key => &$item) {
+      if ($item['product_id'] == $product_id) {
+          // If the product exists, increase or decrease its quantity
+          $item['quantity'] += $quantity;
+          $product_exists_in_cart = true;
+          // If quantity is 0 or less, remove the product from the cart
+          if ($item['quantity'] <= 0) {
+              unset($_SESSION['cart'][$key]);
+          }
+          break;
+      }
+  }
 
   // If the product doesn't exist in the cart, add it
   if (!$product_exists_in_cart && $quantity > 0) {
       $_SESSION['cart'][] = ['product_id' => $product_id, 'quantity' => $quantity];
-  }
-
-  // If quantity is 0 or less, remove the product from the cart
-  if ($quantity <= 0) {
-      foreach ($_SESSION['cart'] as $key => $item) {
-          if ($item['product_id'] == $product_id) {
-              unset($_SESSION['cart'][$key]);
-              break;
-          }
-      }
   }
 
   // Redirect back to the cart page

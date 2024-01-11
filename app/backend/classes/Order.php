@@ -58,21 +58,5 @@ class Order
         }
     }
 
-    public static function getImagesByOrderId($order_id)
-    {
-        $order = self::getOrderById($order_id);
-    
-        $images_reference = $order->images_reference;
-        $images_array = array_map('intval', explode(";", $images_reference));
-    
-        if (!is_array($images_array)) {
-            $images_array = [$images_array];
-        }
-    
-        $images = Database::getInstance()->query("SELECT * FROM images WHERE image_id IN (" . implode(",", $images_array) . ") ORDER BY image_id ASC");
-    
-        return $images;
-    }
-
     // This file creates the orders and gets all the orders in a channel and the orders by id.
 }
