@@ -16,6 +16,7 @@ if ($products) {
             <li style="margin: 10px; padding: 10px; border: 1px solid #000;">
                 <a href="product.php?product_id=<?= $product['product_id']; ?>">
                     <?php echo "{$product['name']} - $" . "{$product['price']}"; ?>
+                    
                 </a>
                 <form method="post">
                     <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">

@@ -2,7 +2,7 @@
   <?php if ($user->isAdmin()) : ?>
       <p><a href="management-hub.php">Management Hub</a></p>
   <?php endif; ?>
-  <p>© 2023. UWU games (I/S)</p>
+  <h6>© 2023. UWU games (I/S)</h6>
 </div>
 
 </body>
