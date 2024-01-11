@@ -173,11 +173,17 @@ class User
         return $user->first();
     }
 
+    public static function getUserByMail($email)
+    {
+        $user = Database::getInstance()->get('users', array('email', '=', $email));
+        return $user->first();
+    }
+
     public static function switchAdminState($user_id)
     {
         $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
         $user = $user->first();
-        
+
         $is_admin = $user->is_admin;
         if ($is_admin == 1) {
             $is_admin = 0;
@@ -187,6 +193,66 @@ class User
 
         $db = Database::getInstance();
         if (!$db->update('users', 'user_id', $user_id, array('is_admin' => $is_admin))) {
+            throw new Exception('There was a problem updating the user.');
+        }
+    }
+
+    public static function checkVerificationByUsername($username)
+    {
+        $user = Database::getInstance()->get('users', array('username', '=', $username));
+        $user = $user->first();
+
+        $verified = $user->is_verified;
+        if ($verified == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getVerificationCode($user_id)
+    {
+        $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
+        if ($user->count()) {
+            $user = $user->first();
+            return $user->verification_code;
+        } else {
+            throw new Exception('No user found with the provided user_id.');
+        }
+    }
+
+    public static function makeVerified($user_id)
+    {
+        $db = Database::getInstance();
+
+        $user = User::getUserById($user_id);
+
+        $user->is_verified = 1;
+        $user->verification_code = NULL;
+
+        if (!$db->update('users', 'user_id', $user_id, array('is_verified' => 1, 'verification_code' => NULL))) {
+            throw new Exception('There was a problem updating the user.');
+        }
+    }
+
+    public static function getUserIdByUsername($username)
+    {
+        $user = Database::getInstance()->get('users', array('username', '=', $username));
+        $user = $user->first();
+
+        return $user->user_id;
+    }
+
+    public static function createVerificationCode($user_id)
+    {
+        $verification_code = random_int(100000, 999999);
+
+        $user = User::getUserById($user_id);
+        $user->verification_code = $verification_code;
+
+        $db = Database::getInstance();
+        
+        if (!$db->update('users', 'user_id', $user_id, array('verification_code' => $verification_code))) {
             throw new Exception('There was a problem updating the user.');
         }
     }
