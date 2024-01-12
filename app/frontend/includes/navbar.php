@@ -15,7 +15,7 @@
           <a class="nav-link" href="accessories.php">Accessories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="about.php">About Us</a>
+          <a class="nav-link" href="about-us.php">About Us</a>
           </li>
       <?php endif; ?>
     </ul>
@@ -41,6 +41,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="accessories.php">Accessories</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="about-us.php">About Us</a>
           </li>
           </li>
         </ul>
