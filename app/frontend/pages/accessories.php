@@ -15,9 +15,9 @@ if ($products) {
         <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
             <?php foreach ($products as $product) : ?>
                 <li style="margin: 10px; padding: 10px;">
-                    <a href="product.php?product_id=<?= $product['product_id']; ?>" style="text-decoration: none; color: inherit;">
-                        <div class="outerBorderW" style="position: relative;">
-                            <?php echo "{$product['name']} - $" . "{$product['price']}"; ?>
+                    <a href="product.php?product_id=<?= $product['product_id']; ?>" style="text-decoration: none; color: inherit;" class="productText">
+                        <div id="productBox" class="outerBorderW product-box" style="position: relative;">
+                            <?php echo "{$product['name']}"; ?>
                             <form method="post">
                                 <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">
                             </form>

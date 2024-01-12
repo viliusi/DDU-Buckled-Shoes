@@ -15,9 +15,9 @@ if ($products) {
         <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
             <?php foreach ($products as $product) : ?>
                 <li style="margin: 10px; padding: 10px;">
-                    <a href="product.php?product_id=<?= $product['product_id']; ?>" style="text-decoration: none; color: inherit;">
-                        <div class="outerBorderW">
-                            <?php echo "{$product['name']} - $" . "{$product['price']}"; ?>
+                    <a href="product.php?product_id=<?= $product['product_id']; ?>" style="text-decoration: none; color: inherit;" class="productText">
+                        <div id="productBox" class="outerBorderW product-box" style="position: relative;">
+                            <?php echo "{$product['name']}"; ?>
                             <form method="post">
                                 <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">
                             </form>
@@ -26,14 +26,16 @@ if ($products) {
                             if (!empty($images->results())) {
                                 $image = $images->results()[0];
                             ?>
-                                <div>
-                                    <?php
-                                    echo "<img src='" . $image->image_location . "' width='200px' height='200px'>";
-                                    ?>
+                                <img class="product-image" src='<?= $image->image_location ?>' width='200px' height='200px'>
+                                <div class="pricetag">
+                                    <?= "$" . "{$product['price']}" ?>
                                 </div>
                             <?php
                             }
                             ?>
+                            <div class="pricetag">
+                                <?php echo "$" . "{$product['price']}"; ?>
+                            </div>
                         </div>
                     </a>
                 </li>

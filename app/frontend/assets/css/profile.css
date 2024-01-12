@@ -84,7 +84,69 @@
     bottom: 10px;
     left: 10px;
     background: #F2C744;
-    padding: 5px;
+    padding-top: 3px;
+    padding-right: 5px;
+    padding-bottom: 3px;
+    padding-left: 5px;
     color: black;
-    border-radius: 0px 0px 0px 10px;
+    border-radius: 0px 5px 0px 5px;
+}
+
+.reviews {
+    background-color: #e0e0e0;
+    color: black;
+    padding-bottom: 200px;
+}
+
+.product-box {
+    transition: transform 0.3s;
+}
+
+#productBox.product-box:hover {
+    transform: scale(1.1);
+    background-color: #393030;
+}
+
+.productText {
+    color: white;
+    font-size: 15px;
+    text-align: center;
+}
+
+#slideshow {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    overflow: hidden;
+}
+
+#slideshow img {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s ease-in-out;
+}
+
+#slideshow img:hover {
+    transform: scale(1.05);
+}
+
+#prevButton, #nextButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent; /* Make the button background transparent */
+    border: none; /* Remove the border */
+    outline: none; /* Remove the focus outline */
+    padding: 5px;
+    cursor: pointer;
+    font-size: 100px;
+    color: white;
+}
+
+#prevButton {
+    left: 10px;
+}
+
+#nextButton {
+    right: 10px;
 }
