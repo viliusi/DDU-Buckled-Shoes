@@ -35,3 +35,34 @@ $product = Product::getProductById($product_id);
   ?>
 
 </div>
+
+<div class="row reviews">
+  <div class="col-sm-4">
+    <h2>Reviews</h2>
+
+    <?php if ($user->isLoggedIn()) { ?>
+      <a href="add-review.php?product_id=<?php echo $product_id ?>" class="btn btn-primary">Post a review</a> <br>
+    <?php } ?>
+
+    <?php
+$reviews = Review::getReviewsByProductId($product_id);
+if ($reviews !== null && $reviews->count() > 0) {
+    foreach ($reviews->results() as $review) {
+    ?>
+      <div class="review">
+      <p><?php echo $review->rating ?>/5</p>
+      <p><?php echo $review->text ?></p>
+      <p><?php echo $review->time ?></p>
+      <p><?php
+          $user = User::getUserById($review->user_id);
+          echo $user->username ?></p>
+    </div>
+    <?php
+    }
+} else {
+    echo "<p>No reviews for this product yet.</p>";
+}
+
+    ?>
+  </div>
+</div>
