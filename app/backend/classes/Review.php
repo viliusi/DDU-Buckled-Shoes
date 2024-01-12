@@ -66,5 +66,13 @@ class Review
         }
     }
 
+    public static function getReviewsByUserId($user_id)
+    {
+        $reviews = Database::getInstance()->get('reviews', array('user_id', '=', $user_id));
+        if ($reviews->count()) {
+            return $reviews;
+        }
+    }
+
     // This file creates the reviews and gets all the reviews in a channel and the reviews by id.
 }

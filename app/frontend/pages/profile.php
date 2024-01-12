@@ -26,6 +26,7 @@
                     </tbody>
                   </table>
                   <a href="your-orders.php" class="btn btn-primary">Your Orders</a>
+                  <a href="your-reviews.php" class="btn btn-primary">Your Reviews</a>
                   <a href="update-account.php" class="btn btn-primary">Update Information</a>
                   <a href="delete-account.php" class="btn btn-danger">Delete Account</a>
                   <a href="logout.php" class="btn btn-danger">Logout</a>
