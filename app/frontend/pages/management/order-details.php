@@ -29,7 +29,9 @@
 
     $total = 0;
 
-    $products = explode(";", $order->products);
+    $products = rtrim($order->products, ";");
+
+    $products = explode(";", $products);
 
     //echo $products->count() . " products found.";
     echo "<table style='width:100%; border: 1px solid'>";
@@ -44,18 +46,22 @@
         $product = explode(",", $product);
         $product_id = $product[1];
         $quantity = $product[0];
-
+    
         $product = Product::getProductById($product_id);
-
-        echo "<tr>";
-        echo "<td>" . $product->product_id . "</td>";
-        echo "<td>" . $product->name . "</td>";
-        echo "<td>" . $product->price . "</td>";
-        echo "<td>" . $quantity . "</td>";
-        $subtotal = $product->price * $quantity;
-        $total += $subtotal;
-        echo "<td>" . $subtotal . "</td>";
-        echo "</tr>";
+    
+        if ($product !== null) {
+            echo "<tr>";
+            echo "<td>" . $product->product_id . "</td>";
+            echo "<td>" . $product->name . "</td>";
+            echo "<td>" . $product->price . "</td>";
+            echo "<td>" . $quantity . "</td>";
+            $subtotal = $product->price * $quantity;
+            $total += $subtotal;
+            echo "<td>" . $subtotal . "</td>";
+            echo "</tr>";
+        } else {
+            echo "<tr><td colspan='5'>Product with ID $product_id not found</td></tr>";
+        }
     }
     echo "<tr>";
     echo "<th> Total </th>";

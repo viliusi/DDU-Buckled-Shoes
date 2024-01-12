@@ -64,21 +64,39 @@ if (Input::exists()) {
                     $mail->Port       = 587;
 
                     //Recipients
-                    $mail->setFrom('christenbot@buckledshoes.store', 'Mailer');
+                    $mail->setFrom('christenbot@buckledshoes.store', 'ChristenBot');
                     $mail->addAddress(Input::get('email'));     // Add a recipient
 
                     // Content
                     $mail->isHTML(true);
-                    $mail->Subject = 'Verification Mail';
-                    $mail->Body    = 'Please click on the link below to verify your account.<br><a href="http://buckledshoes.store/verification.php?user_id=' . $user->getUserIdByUsername(Input::get('username')) . '&verification_code=' . $user->getVerificationCode($user_id) . '">Verify</a>';
-                    $mail->AltBody = 'Please click on the link below to verify your account.<br><a href="http://buckledshoes.store/verification.php?user_id=' . $user->getUserIdByUsername(Input::get('username')) . '&verification_code=' . $user->getVerificationCode($user_id) . '">Verify</a>';
+                    $mail->Subject = 'Verify your account for Buckled Shoes';
+                    $mail->Body = '
+<html>
+<head>
+    <style>
+        body {font-family: Arial, sans-serif;}
+        .container {width: 80%; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;}
+        .button {background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to Buckled Shoes Store!</h2>
+        <p>Please click on the button below to verify your account. If you do not wish to keep this account for whatever reason, then you can choose to delete the account through the link.</p>
+        <a href="http://buckledshoes.store/verification.php?user_id=' . $user->getUserIdByUsername(Input::get('username')) . '&verification_code=' . $user->getVerificationCode($user_id) . '" class="button">Verify</a>
+    </div>
+</body>
+</html>';
+                    $mail->AltBody = 'Welcome to Buckled Shoes Store!
+
+Please click on the button below to verify your account. If you do not wish to keep this account for whatever reason, then you can choose to delete the account through the link: http://buckledshoes.store/verification.php?user_id=' . $user->getUserIdByUsername(Input::get('username')) . '&verification_code=' . $user->getVerificationCode($user_id) . '';
 
                     $mail->send();
                 } catch (Exception $e) {
                     die($e->getMessage());
                 }
 
-                Session::flash('register-success', 'Thanks for registering! Now you just need to verify with your mail.');
+                Session::flash('register-success', 'Thanks for registering! Now you just need to verify with your mail. Please check your mail for the verification link. After verifying you can ');
                 Redirect::to('index.php');
             } catch (Exception $e) {
                 die($e->getMessage());

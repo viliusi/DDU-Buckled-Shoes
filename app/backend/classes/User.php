@@ -199,9 +199,13 @@ class User
 
     public static function checkVerificationByUsername($username)
     {
+        // check if user exists
         $user = Database::getInstance()->get('users', array('username', '=', $username));
+        if (!$user->count()) {
+            return false;
+        }
+        
         $user = $user->first();
-
         $verified = $user->is_verified;
         if ($verified == 1) {
             return true;
@@ -253,6 +257,21 @@ class User
         $db = Database::getInstance();
         
         if (!$db->update('users', 'user_id', $user_id, array('verification_code' => $verification_code))) {
+            throw new Exception('There was a problem updating the user.');
+        }
+    }
+
+    public static function makeUnverified($user_id)
+    {
+        $db = Database::getInstance();
+
+        $user = User::getUserById($user_id);
+
+        $user->is_verified = 0;
+
+        User::createVerificationCode($user_id);
+
+        if (!$db->update('users', 'user_id', $user_id, array('is_verified' => 0))) {
             throw new Exception('There was a problem updating the user.');
         }
     }

@@ -12,8 +12,12 @@
     <?php echo $user->user_id ?>
     <li style="font-weight: bold">Is admin?: </li>
     <?php echo $user->is_admin ?>
+    <li style="font-weight: bold">Is verified?: </li>
+    <?php echo $user->is_verified ?>
     <li style="font-weight: bold">Username: </li>
     <?php echo $user->username ?>
+    <li style="font-weight: bold">Email: </li>
+    <?php echo $user->email ?>
 
     <br><br>
 

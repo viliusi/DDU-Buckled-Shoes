@@ -16,7 +16,7 @@ if (Input::exists()) {
 
         if ($validate->passed()) {
             try {
-                User::switchAdminState(Input::get('product_id'));
+                User::switchAdminState(Input::get('user_id'));
 
                 Session::flash('create-post-success', 'Thanks for admining.');
                 Redirect::to('management-users.php');

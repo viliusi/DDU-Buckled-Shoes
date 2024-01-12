@@ -10,7 +10,6 @@
     echo "<th>User ID</th>";
     echo "<th>Is admin?</th>";
     echo "<th>Is verified?</th>";
-    echo "<th>Verification code</th>";
     echo "<th>Username</th>";
     echo "<th>Email</th>";
     echo "<th>Joined</th>";
@@ -23,7 +22,6 @@
       echo "<td>" . $user->user_id . "</td>";
       echo "<td>" . $user->is_admin . "</td>";
       echo "<td>" . $user->is_verified . "</td>";
-      echo "<td>" . $user->verification_code . "</td>";
       echo "<td>" . $user->username . "</td>";
       echo "<td>" . $user->email . "</td>";
       echo "<td>" . $user->joined . "</td>";
