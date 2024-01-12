@@ -74,5 +74,13 @@ class Product
         return $images;
     }
 
+    public static function getProductPriceById($product_id)
+    {
+        $product = self::getProductById($product_id);
+        if ($product !== null) {
+            return $product->price;
+        }
+    }
+
     // This file creates the products and gets all the products in a channel and the products by id.
 }

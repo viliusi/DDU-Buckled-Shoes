@@ -15,22 +15,31 @@ if ($order === null) {
     die('Order not found');
 }
 
-echo "Order ID: " . $order->order_id . "<br>";
+// Check if the time property exists before trying to echo it
 
-if (isset($order->order_date)) {
-    echo "Order Date: " . $order->order_date . "<br>";
-}
+echo "<br><br>Order Date: " . $order->time . "<br>";
 
-if (isset($order->total)) {
-    echo "Order Total: " . $order->total . "<br>";
-}
+// Initialize total order price
+$totalOrderPrice = 0;
 
-// Check if the products property exists and is an array before trying to iterate over it
-if (isset($order->products) && is_array($order->products)) {
-    foreach ($order->products as $product) {
-        echo "Product ID: " . $product->product_id . "<br>";
-        echo "Product Name: " . $product->name . "<br>";
-        echo "Product Price: " . $product->price . "<br>";
+// Check if the products property exists and is a string before trying to parse it
+if (isset($order->products) && is_string($order->products)) {
+    // Parse the products string into an array of product IDs and quantities
+    $products = explode(';', trim($order->products, ';'));
+    foreach ($products as $product) {
+        list($product_id, $quantity) = explode(',', $product);
+
+        // Fetch the price for the product from the database
+        $productPrice = Product::getProductPriceById($product_id);
+
+        // Calculate the total price for this product and add it to the total order price
+        $totalOrderPrice += $productPrice * $quantity;
+
+        echo "Product ID: " . $quantity . "<br>";
+        echo "Product Quantity: " . $product_id . "<br>";
+        echo "Product Price: " . $productPrice . "<br>" . "<br>";
     }
 }
+
+echo "Total Order Price: " . $totalOrderPrice . "<br>";
 ?>
