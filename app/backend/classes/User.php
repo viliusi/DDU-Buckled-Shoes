@@ -275,4 +275,27 @@ class User
             throw new Exception('There was a problem updating the user.');
         }
     }
+
+    public static function delete($user_id)
+    {
+        if (!$user_id && $user_id != 0) {
+            throw new Exception('Missing user ID');
+        }
+    
+        $db = Database::getInstance();
+    
+        // Disable foreign key checks
+        $db->query("SET FOREIGN_KEY_CHECKS=0");
+    
+        if (!$db->delete('users', array('user_id', '=', $user_id))) {
+            throw new Exception('There was a problem deleting the user.');
+        }
+    
+        $db->delete('reviews', array('user_id', '=', $user_id));
+        $db->delete('orders', array('user_id', '=', $user_id));
+        $db->delete('users_sessions', array('user_id', '=', $user_id));
+    
+        // Enable foreign key checks
+        $db->query("SET FOREIGN_KEY_CHECKS=1");
+    }
 }

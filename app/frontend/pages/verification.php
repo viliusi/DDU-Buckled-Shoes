@@ -17,6 +17,21 @@
         <input type="submit" value="Verify account now">
     </form>
 
-    <p>If the details above are not what you expected, then please press the "Cancel registration" button.</p>
+    <p>If the details above are not what you expected, then please press the "Delete account" button.</p>
     
+    <form method="post">
+        <input type="submit" name="delete" id="test" value="Delete account" /><br />
+    </form>
+
+    <?php
+
+    function delete()
+    {
+        User::delete($_GET['user_id']);
+        Redirect::to('index.php');
+    }
+    if (array_key_exists('delete', $_POST)) {
+        delete();
+    }
+    ?>
 </div>

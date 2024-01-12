@@ -1,6 +1,6 @@
 <?php
 require_once 'app/backend/core/Init.php';
 
-$user->deleteMe();
+User::delete($user->data()->user_id);
 
 Redirect::to('index.php');

@@ -16,8 +16,15 @@
 
     if ($reviews !== null && $reviews->count() > 0) {
         foreach ($reviews->results() as $review) {
-            echo $review->rating . "/5 stars <br>";
-            echo $review->text . "<br><br>";
+            $product = Product::getProductById($review->product_id);
+            echo "<h4>" . $product->name . "</h4>";
+            echo $review->rating . "/5 Stars <br>";
+            echo $review->text . "<br>";
+            if ($user->data()->user_id == $review->user_id) {
+                ?>
+                <a href="manage-review.php?review_id=<?php echo $review->review_id ?>" class="btn btn-primary">Manage</a> <br><br>
+                <?php
+              }
         }
     } else {
         echo "No reviews found.";
