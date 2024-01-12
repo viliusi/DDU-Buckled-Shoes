@@ -58,5 +58,13 @@ class Order
         }
     }
 
+    public static function getOrdersByUserId($user_id)
+    {
+        $orders = Database::getInstance()->get('orders', array('user_id', '=', $user_id));
+        if ($orders->count()) {
+            return $orders->results();
+        }
+    }
+
     // This file creates the orders and gets all the orders in a channel and the orders by id.
 }
