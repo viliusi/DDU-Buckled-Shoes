@@ -1,5 +1,7 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <a class="navbar-brand" href="index.php">Buckled Shoes</a>
+  <a class="navbar-brand" href="index.php">
+    <img src="app\frontend\assets\img\Buckled_shoes-logos_white(1) 2.png" alt="logo" style="width:40px;">
+  </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -12,6 +14,9 @@
         <li class="nav-item">
           <a class="nav-link" href="accessories.php">Accessories</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about.php">About Us</a>
+          </li>
       <?php endif; ?>
     </ul>
 
