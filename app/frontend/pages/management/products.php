@@ -1,7 +1,8 @@
 <div class="container" style="margin-top:30px">
   <h2>Product Management</h2>
   <br>
-  <button><a href="management-add-products.php">Add</a></button> 
+  <button><a href="management-add-products.php">Add</a></button>
+  <button><a href="management-inventory.php">Inventory</a></button>
   <br> <br>
   <?php 
   $products = Product::getAllProducts();
@@ -22,7 +23,8 @@
       echo "<tr>";
       echo "<td>" . $product->product_id . "</td>";
       echo "<td>" . $product->name . "</td>";
-      echo "<td>" . $product->price . "</td>";
+      $price = Product::getCurrentPrice($product->product_id);
+      echo "<td>" . $price . "</td>";
       echo "<td>" . $product->category . "</td>";
       echo "<td>" . $product->description . "</td>";
       echo "<td>" . $product->images_reference . "</td>";
