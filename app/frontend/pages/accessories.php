@@ -27,14 +27,17 @@ if ($products) {
                                 $image = $images->results()[0];
                             ?>
                                 <img class="product-image" src='<?= $image->image_location ?>' width='200px' height='200px'>
-                                <div class="pricetag">
-                                    <?= "$" . "{$product['price']}" ?>
-                                </div>
                             <?php
                             }
                             ?>
                             <div class="pricetag">
-                                <?php echo "$" . "{$product['price']}"; ?>
+                                <?php $price = Product::getCurrentPrice($product['product_id']) ?>
+                                <?php echo "$" . $price; ?>
+                                    <?php $priceO = Product::getOriginalPrice($product['product_id']) ?>
+                                    <?php echo "<span>$" . $priceO . "</span>"; ?>
+
+                                <?php /* $discount = Product::getDiscount($product['product_id']) */ ?>
+                                <?php /*echo $discount . "🍔";*/ ?>
                             </div>
                         </div>
                     </a>

@@ -33,6 +33,11 @@
         }
         ?>
       </div>
+      <div id="imageButtons">
+        <?php foreach ($productImages as $index => $image) : ?>
+          <button class="imageButton" data-index="<?php echo $index; ?>"><?php echo $index + 1; ?></button>
+        <?php endforeach; ?>
+      </div>
       <button id="prevButton" style="position: absolute; top: 50%; transform: translateY(-50%); font-size: 20px; background: none; border: none; color: #fff; cursor: pointer; left: 10px;">‹</button>
       <button id="nextButton" style="position: absolute; top: 50%; transform: translateY(-50%); font-size: 20px; background: none; border: none; color: #fff; cursor: pointer; right: 10px;">›</button>
     </div>
@@ -58,17 +63,17 @@
       });
     }
 
-    document.getElementById('prevButton').addEventListener('click', function () {
+    document.getElementById('prevButton').addEventListener('click', function() {
       currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
       document.getElementById('slideshowImage').src = images[currentImageIndex];
       updateShoeInfo(currentImageIndex);
     });
 
-    document.getElementById('nextButton').addEventListener('click', function () {
+    document.getElementById('nextButton').addEventListener('click', function() {
       changeImage();
     });
 
-    document.getElementById('slideshowLink').addEventListener('click', function (event) {
+    document.getElementById('slideshowLink').addEventListener('click', function(event) {
       event.preventDefault();
       const currentProductId = productIds[currentImageIndex];
       window.location.href = 'product.php?product_id=' + currentProductId;
@@ -76,13 +81,24 @@
 
     slideshowInterval = setInterval(changeImage, 2000);
 
-    document.getElementById('slideshowContainer').addEventListener('mouseover', function () {
+    document.getElementById('slideshowContainer').addEventListener('mouseover', function() {
       clearInterval(slideshowInterval); // Pause the slideshow
     });
 
-    document.getElementById('slideshowContainer').addEventListener('mouseout', function () {
+    document.getElementById('slideshowContainer').addEventListener('mouseout', function() {
       slideshowInterval = setInterval(changeImage, 2000); // Resume the slideshow
     });
+
+    document.querySelectorAll('.imageButton').forEach(button => {
+      button.addEventListener('click', function() {
+        currentImageIndex = parseInt(this.dataset.index);
+        document.getElementById('slideshowImage').src = images[currentImageIndex];
+        updateShoeInfo(currentImageIndex);
+      });
+    });
   </script>
-  
+
 </div>
+<div>
+  <h2>Accessories</h2>
+  </div>
