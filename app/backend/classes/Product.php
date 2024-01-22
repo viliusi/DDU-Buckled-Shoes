@@ -90,20 +90,56 @@ class Product
 
     public static function getCurrentPrice($product_id)
     {
-        $priceDB = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first();
-        return $priceDB->price * (100 - $priceDB->discount) / 100;
+        $priceDB = Database::getInstance()->get('prices', array('product_id', '=', $product_id));
+        if ($priceDB->count() > 0) {
+            $firstPrice = $priceDB->results()[0];
+            if ($firstPrice->discount > 0) {
+                return $firstPrice->price * (100 - $firstPrice->discount) / 100;
+            } else {
+                return $firstPrice->price;
+            }
+        } else {
+            // Handle the case when there is no price for the given product id
+            // This could be returning a default price, throwing an exception, etc.
+            // Here we return 0 as an example
+            return 0;
+        }
     }
 
     public static function getDiscount($product_id)
     {
-        $price = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first()->price;
-        return $price->discount;
+        $priceDB = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first();
+        if ($priceDB !== null) {
+            return $priceDB->discount;
+        } else {
+            // Handle the case when there is no price for the given product id
+            // This could be returning a default price, throwing an exception, etc.
+            // Here we return 0 as an example
+            return 0;
+        }
     }
 
     public static function getOriginalPrice($product_id)
     {
-        $price = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first()->price;
-        return $price;
+        $priceDB = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first();
+        if ($priceDB !== null) {
+            return $priceDB->price;
+        } else {
+            // Handle the case when there is no price for the given product id
+            // This could be returning a default price, throwing an exception, etc.
+            // Here we return 0 as an example
+            return 0;
+        }
+    }
+
+    public static function getVariationsByProductId($product_id)
+    {
+        $productVariations = Database::getInstance()->get('product_variations', array('product_id', '=', $product_id));
+        if ($productVariations->count() > 0) {
+            return $productVariations;
+        } else {
+            return null;
+        }
     }
 
     // This file creates the products and gets all the products in a channel and the products by id.
