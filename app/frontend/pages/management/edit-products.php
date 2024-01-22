@@ -33,7 +33,9 @@
     <li style="font-weight: bold">Description: </li>
     <?php echo $product->description ?>
     <li style="font-weight: bold">Price: </li>
-    <?php echo $product->price ?>
+    <?php echo Product::getOriginalPrice($product->product_id) ?>
+    <li style="font-weight: bold">Discount_Price: </li>
+    <?php echo Product::getCurrentPrice($product->product_id) ?>
     <li style="font-weight: bold">Category: </li>
     <?php echo $product->category ?>
     <li style="font-weight: bold">Images_Reference:></li>
@@ -65,7 +67,7 @@
         </div>
         <div class="form-group">
             <label for="price">Price :</label> <br>
-            <input type="text" name="price" id="price" value="<?php echo $product->price ?>">
+            <input type="text" name="price" id="price" value="<?php echo Product::getOriginalPrice($product->product_id) ?>">
         </div>
         <div class="form-group">
             <label for="category">Category :</label> <br>
@@ -77,4 +79,41 @@
         </div>
         <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
         <input type="submit" value="Update">
+    </form>
+
+    <br> <br>
+
+    <h4>Variations:</h4>
+
+    <?php
+    $variations = Product::getProductVariationsById($product->product_id);
+
+
+    foreach ($variations as $variation) {
+        echo "<li style='font-weight: bold'>Variation Name: </li>";
+        echo $variation->name;
+        echo "<form action='management-edit-products.php' method='post'>";
+        echo "<input type='hidden' name='variation_id' value='" . $variation->variation_id . "'>";
+        echo "<input type='hidden' name='product_id' value='" . $product->product_id . "'>";
+        echo "<input type='hidden' name='csrf_token' value='" . Token::generate() . "'>";
+        echo "<input type='submit' name='delete_variation' value='Delete Variation' />";
+        echo "</form>";
+        echo "<br>";
+    }
+    echo "<li style='font-weight: bold'>Add Variation: </li>";
+    echo "<form action='management-edit-products.php' method='post'>";
+    echo "<input type='hidden' name='product_id' value='" . $product->product_id . "'>";
+    echo "<input type='hidden' name='csrf_token' value='" . Token::generate() . "'>";
+    echo "<input type='submit' name='add_variation' value='Add Variation' />";
+    echo "</form>";
+
+    function delete_variation()
+    {
+        Product::deleteVariation($_POST['variation_id']);
+        Redirect::to('management-edit-products.php?product_id=' . $_POST['product_id']);
+    }
+    if (array_key_exists('delete_variation', $_POST)) {
+        delete_variation();
+    }
+    ?>
 </div>

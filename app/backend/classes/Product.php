@@ -82,14 +82,10 @@ class Product
         }
     }
 
-    public static function getProductVariationsById($product_id)
-    {
-        $productVariations = Database::getInstance()->get('product_variations', array('product_id', '=', $product_id));
-        if ($productVariations->count() > 0) {
-            return $productVariations;
-        } else {
-            return null;
-        }
+    public static function getProductVariationsById($productId) {
+        $db = Database::getInstance();
+        $db->query("SELECT * FROM product_variations WHERE product_id = ?", [$productId]);
+        return $db->results();  // Assuming there's a results method that returns _results
     }
 
     public static function getCurrentPrice($product_id)
