@@ -61,25 +61,53 @@ class Product
     public static function getImagesByProductId($product_id)
     {
         $product = self::getProductById($product_id);
-    
+
         $images_reference = $product->images_reference;
         $images_array = array_map('intval', explode(";", $images_reference));
-    
+
         if (!is_array($images_array)) {
             $images_array = [$images_array];
         }
-    
+
         $images = Database::getInstance()->query("SELECT * FROM images WHERE image_id IN (" . implode(",", $images_array) . ") ORDER BY image_id ASC");
-    
+
         return $images;
     }
 
-    public static function getProductPriceById($product_id)
+    public static function getStockByVariationId($variation_id)
     {
-        $product = self::getProductById($product_id);
-        if ($product !== null) {
-            return $product->price;
+        $variation = Database::getInstance()->get('product_variations', array('variation_id', '=', $variation_id))->first();
+        if ($variation !== null) {
+            return $variation->stock;
         }
+    }
+
+    public static function getProductVariationsById($product_id)
+    {
+        $productVariations = Database::getInstance()->get('product_variations', array('product_id', '=', $product_id));
+        if ($productVariations->count() > 0) {
+            return $productVariations;
+        } else {
+            return null;
+        }
+    }
+
+    public static function getCurrentPrice($product_id)
+    {
+        $priceDB = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first();
+        return $priceDB->price * (100 - $priceDB->discount) / 100;
+    }
+
+    public static function getDiscount($product_id)
+    {
+        $price = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first()->price;
+        return $price->discount;
+    }
+
+    public static function getOriginalPrice($product_id)
+    {
+        $price = Database::getInstance()->get('prices', array('product_id', '=', $product_id))->first()->price;
+        return $price;
     }
 
     // This file creates the products and gets all the products in a channel and the products by id.
