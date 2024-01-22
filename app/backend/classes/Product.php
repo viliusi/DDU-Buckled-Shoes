@@ -17,8 +17,35 @@ class Product
 
         $db = Database::getInstance();
 
+        // Save the price in a separate variable
+        $price = $fields['price'];
+        // Remove the price from the fields array
+        unset($fields['price']);
+
+        // Update the product without the price
         if (!$db->update('products', 'product_id', $product_id, $fields)) {
             throw new Exception('There was a problem updating the product.');
+        }
+
+        // Prepare the price fields
+        $priceFields = array(
+            'product_id' => $product_id,
+            'price' => $price
+        );
+
+        // Check if a price already exists for the product
+        $existingPrice = $db->get('prices', array('product_id', '=', $product_id));
+
+        if ($existingPrice->count()) {
+            // Update the price if it already exists
+            if (!$db->update('prices', 'product_id', $product_id, $priceFields)) {
+                throw new Exception('There was a problem updating the price.');
+            }
+        } else {
+            // Insert the price if it doesn't exist
+            if (!$db->insert('prices', $priceFields)) {
+                throw new Exception('There was a problem inserting the price.');
+            }
         }
     }
 
@@ -82,7 +109,8 @@ class Product
         }
     }
 
-    public static function getProductVariationsById($productId) {
+    public static function getProductVariationsById($productId)
+    {
         $db = Database::getInstance();
         $db->query("SELECT * FROM product_variations WHERE product_id = ?", [$productId]);
         return $db->results();  // Assuming there's a results method that returns _results
@@ -134,11 +162,37 @@ class Product
 
     public static function getVariationsByProductId($product_id)
     {
-        $productVariations = Database::getInstance()->get('product_variations', array('product_id', '=', $product_id));
+        $productVariations = Database::getInstance()->get('product_variations', array('product_id', '=', $product_id), 'name', 'ASC');
         if ($productVariations->count() > 0) {
             return $productVariations;
         } else {
             return null;
+        }
+    }
+
+    public static function deleteVariation($variation_id)
+    {
+        if (!$variation_id && $variation_id != 0) {
+            throw new Exception('Missing variation ID');
+        }
+
+        $db = Database::getInstance();
+
+        if (!$db->delete('product_variations', array('variation_id', '=', $variation_id))) {
+            throw new Exception('There was a problem deleting the variation.');
+        }
+    }
+
+    public static function addVariation($product_id, $variation_name)
+    {
+        if (!$product_id && $product_id != 0) {
+            throw new Exception('Missing product ID');
+        }
+
+        $db = Database::getInstance();
+
+        if (!$db->insert('product_variations', array('product_id' => $product_id, 'name' => $variation_name))) {
+            throw new Exception('There was a problem adding the variation.');
         }
     }
 

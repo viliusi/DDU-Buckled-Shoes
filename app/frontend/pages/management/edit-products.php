@@ -32,7 +32,7 @@
     <?php echo $product->name ?>
     <li style="font-weight: bold">Description: </li>
     <?php echo $product->description ?>
-    <li style="font-weight: bold">Price: </li>
+    <li style="font-weight: bold">Original Price: </li>
     <?php echo Product::getOriginalPrice($product->product_id) ?>
     <li style="font-weight: bold">Discount_Price: </li>
     <?php echo Product::getCurrentPrice($product->product_id) ?>
@@ -66,7 +66,7 @@
             <input type="text" name="description" id="description" value="<?php echo $product->description ?>">
         </div>
         <div class="form-group">
-            <label for="price">Price :</label> <br>
+            <label for="price">Original Price :</label> <br>
             <input type="text" name="price" id="price" value="<?php echo Product::getOriginalPrice($product->product_id) ?>">
         </div>
         <div class="form-group">
@@ -88,6 +88,10 @@
     <?php
     $variations = Product::getProductVariationsById($product->product_id);
 
+    // sort the variations by name
+    usort($variations, function ($a, $b) {
+        return $a->name <=> $b->name;
+    });
 
     foreach ($variations as $variation) {
         echo "<li style='font-weight: bold'>Variation Name: </li>";
@@ -95,7 +99,6 @@
         echo "<form action='management-edit-products.php' method='post'>";
         echo "<input type='hidden' name='variation_id' value='" . $variation->variation_id . "'>";
         echo "<input type='hidden' name='product_id' value='" . $product->product_id . "'>";
-        echo "<input type='hidden' name='csrf_token' value='" . Token::generate() . "'>";
         echo "<input type='submit' name='delete_variation' value='Delete Variation' />";
         echo "</form>";
         echo "<br>";
@@ -103,17 +106,39 @@
     echo "<li style='font-weight: bold'>Add Variation: </li>";
     echo "<form action='management-edit-products.php' method='post'>";
     echo "<input type='hidden' name='product_id' value='" . $product->product_id . "'>";
-    echo "<input type='hidden' name='csrf_token' value='" . Token::generate() . "'>";
+    echo "<input type='text' name='variation_name' placeholder='Enter variation number' required>";
     echo "<input type='submit' name='add_variation' value='Add Variation' />";
     echo "</form>";
 
     function delete_variation()
     {
+        if (!isset($_POST['variation_id'], $_POST['product_id'])) {
+            // Handle error: required form fields are missing
+            return;
+        }
+
         Product::deleteVariation($_POST['variation_id']);
         Redirect::to('management-edit-products.php?product_id=' . $_POST['product_id']);
     }
+
     if (array_key_exists('delete_variation', $_POST)) {
         delete_variation();
+    }
+
+    function add_variation()
+    {
+        if (!isset($_POST['variation_name'], $_POST['product_id'])) {
+            // Handle error: required form fields are missing
+            return;
+        }
+
+        Product::addVariation($_POST['product_id'], $_POST['variation_name']);
+        echo "<script type='text/javascript'>alert('Variation added successfully!');</script>";
+        Redirect::to('management-edit-products.php?product_id=' . $_POST['product_id']);
+    }
+
+    if (array_key_exists('add_variation', $_POST)) {
+        add_variation();
     }
     ?>
 </div>
