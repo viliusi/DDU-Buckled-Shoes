@@ -11,11 +11,6 @@
 
   <link rel="stylesheet" href="<?php echo FRONTEND_ASSET . 'css/profile.css'; ?>">
 
-  <style>
-    .fakeimg {
-      height: 200px;
-      background: #aaa;
-    }
-  </style>
+
 </head>
 
