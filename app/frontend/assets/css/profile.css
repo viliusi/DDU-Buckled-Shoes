@@ -16,32 +16,33 @@
     cursor: pointer;
 }
 
-.table-user-information > tbody > tr {
+.table-user-information>tbody>tr {
     border-top: 1px solid rgb(221, 221, 221);
 }
 
-.table-user-information > tbody > tr:first-child {
+.table-user-information>tbody>tr:first-child {
     border-top: 0;
 }
 
 
-.table-user-information > tbody > tr > td {
+.table-user-information>tbody>tr>td {
     border-top: 0;
 }
-.toppad
-{
-    margin-top:20px;
+
+.toppad {
+    margin-top: 20px;
 }
 
-.h3{
+.h3 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
 }
 
-.product-page{
+.product-page {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 .split {
     background: linear-gradient(to right, #322929 50%, #D9D9D9 50%);
 }
@@ -118,12 +119,14 @@
     font-size: 15px;
     text-align: center;
 }
+
 #slideshowContainer {
     position: relative;
     width: 500px;
     height: 300px;
     margin: 0 auto;
 }
+
 #slideshow {
     position: relative;
     width: 500px;
@@ -136,19 +139,49 @@
     height: 100%;
     transition: transform 0.2s ease-in-out;
     border-radius: 10px;
+    clip-path: polygon(0 15%, 100% 15%, 100% 85%, 0 85%);
+    border-left: 5px solid yellow;
+    border-bottom: 5px solid yellow;
 }
-
+/*
+.yellowBorder {
+    border-left: 5px solid yellow;
+    border-bottom: 5px solid yellow;
+}
+*/
 #slideshow img:hover {
     transform: scale(1.05);
 }
 
-#prevButton, #nextButton {
+#imageButtons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.imageButton {
+    width: 100px;
+    height: 25px;
+    border-radius: 25px;
+    background-color: #727272;
+}
+
+.imageButton.active {
+    background-color: #f2c744;
+    width: 110px;
+}
+
+#prevButton,
+#nextButton {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: transparent; /* Make the button background transparent */
-    border: none; /* Remove the border */
-    outline: none; /* Remove the focus outline */
+    background: transparent;
+    /* Make the button background transparent */
+    border: none;
+    /* Remove the border */
+    outline: none;
+    /* Remove the focus outline */
     padding: 5px;
     cursor: pointer;
     font-size: 100px;
@@ -165,5 +198,6 @@
 
 .navbar {
     box-shadow: 0px 0px 15px 0px #0000008b;
-    background-color: #00ffa6; /* No work */
+    background-color: #00ffa6;
+    /* No work */
 }

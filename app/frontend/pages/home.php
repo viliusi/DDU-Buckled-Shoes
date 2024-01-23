@@ -89,66 +89,103 @@
       slideshowInterval = setInterval(changeImage, 2000); // Resume the slideshow
     });
 
-    document.querySelectorAll('.imageButton').forEach(button => {
-      button.addEventListener('click', function() {
+    document.querySelectorAll('.imageButton').forEach((button, index) => {
+    button.addEventListener('click', function() {
+        clearInterval(slideshowInterval); // Clear the interval
         currentImageIndex = parseInt(this.dataset.index);
         document.getElementById('slideshowImage').src = images[currentImageIndex];
         updateShoeInfo(currentImageIndex);
-      });
+        updateActiveButton();
+        slideshowInterval = setInterval(changeImage, 2000); // Restart the interval
     });
+    if (index === currentImageIndex) {
+        button.classList.add('active');
+    }
+});
+
+    function updateActiveButton() {
+    document.querySelectorAll('.imageButton').forEach((button, index) => {
+        if (index === currentImageIndex) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+}
+
+document.getElementById('prevButton').addEventListener('click', function() {
+    clearInterval(slideshowInterval); // Clear the interval
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    document.getElementById('slideshowImage').src = images[currentImageIndex];
+    updateShoeInfo(currentImageIndex);
+    updateActiveButton();
+    slideshowInterval = setInterval(changeImage, 2000); // Restart the interval
+});
+
+document.getElementById('nextButton').addEventListener('click', function() {
+    changeImage();
+    updateActiveButton();
+});
+
+slideshowInterval = setInterval(function() {
+    changeImage();
+    updateActiveButton();
+}, 2000);
+
+window.onload = updateActiveButton;
   </script>
 
 </div>
 <div>
   <h2>Accessories</h2>
-  </div>
+</div>
 
-  <?php
+<?php
 $products = Database::getInstance()->query("SELECT * FROM products WHERE Category = 'accessory'")->results();
 if ($products) {
-    foreach ($products as $key => $product) {
-        $products[$key] = get_object_vars($product);
-    }
+  foreach ($products as $key => $product) {
+    $products[$key] = get_object_vars($product);
+  }
 }
 ?>
 <html>
 
 <body>
-    <div class="container" style="margin-top:75px">
-        <h2>Accessories</h2>
-        <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
-            <?php foreach ($products as $product) : ?>
-                <li style="margin: 10px; padding: 10px;">
-                    <a href="product.php?product_id=<?= $product['product_id']; ?>" style="text-decoration: none; color: inherit;" class="productText">
-                        <div id="productBox" class="outerBorderW product-box" style="position: relative;">
-                            <?php echo "{$product['name']}"; ?>
-                            <form method="post">
-                                <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">
-                            </form>
-                            <?php
-                            $images = Product::getImagesByProductId($product['product_id']);
-                            if (!empty($images->results())) {
-                                $image = $images->results()[0];
-                            ?>
-                                <img class="product-image" src='<?= $image->image_location ?>' width='200px' height='200px'>
-                            <?php
-                            }
-                            ?>
-                            <div class="pricetag">
-                                <?php $price = Product::getCurrentPrice($product['product_id']) ?>
-                                <?php echo "$" . $price; ?>
-                                    <?php $priceO = Product::getOriginalPrice($product['product_id']) ?>
-                                    <?php echo "<span>$" . $priceO . "</span>"; ?>
+  <div class="container" style="margin-top:75px">
+    <h2>Accessories</h2>
+    <ul style="list-style-type: none; display: flex; flex-wrap: wrap;">
+      <?php foreach ($products as $product) : ?>
+        <li style="margin: 10px; padding: 10px;">
+          <a href="product.php?product_id=<?= $product['product_id']; ?>" style="text-decoration: none; color: inherit;" class="productText">
+            <div id="productBox" class="outerBorderW product-box" style="position: relative;">
+              <?php echo "{$product['name']}"; ?>
+              <form method="post">
+                <input type="hidden" name="product_id" value="<?= $product['product_id']; ?>">
+              </form>
+              <?php
+              $images = Product::getImagesByProductId($product['product_id']);
+              if (!empty($images->results())) {
+                $image = $images->results()[0];
+              ?>
+                <img class="product-image" src='<?= $image->image_location ?>' width='200px' height='200px'>
+              <?php
+              }
+              ?>
+              <div class="pricetag">
+                <?php $price = Product::getCurrentPrice($product['product_id']) ?>
+                <?php echo "$" . $price; ?>
+                <?php $priceO = Product::getOriginalPrice($product['product_id']) ?>
+                <?php echo "<span>$" . $priceO . "</span>"; ?>
 
-                                <?php /* $discount = Product::getDiscount($product['product_id']) */ ?>
-                                <?php /*echo $discount . "🍔";*/ ?>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
+                <?php /* $discount = Product::getDiscount($product['product_id']) */ ?>
+                <?php /*echo $discount . "🍔";*/ ?>
+              </div>
+            </div>
+          </a>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
 </body>
 
 </html>
