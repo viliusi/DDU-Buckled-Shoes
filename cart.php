@@ -1,4 +1,3 @@
-error_reporting(E_ALL);
 <?php require_once 'start.php'; ?>
 <?php require_once BACKEND_CLASSES . 'Product.php'; ?>
 <?php require_once FRONTEND_INCLUDE . 'header.php'; ?>

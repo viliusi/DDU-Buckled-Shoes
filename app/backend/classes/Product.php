@@ -4,8 +4,28 @@ class Product
 {
     public static function create($fields = array())
     {
-        if (!Database::getInstance()->insert('products', $fields)) {
+        $db = Database::getInstance();
+
+        // Save the price in a separate variable
+        $price = $fields['price'];
+        // Remove the price from the fields array
+        unset($fields['price']);
+
+        // Insert the product without the price
+        $productId = $db->insert('products', $fields);
+        if (!$productId) {
             throw new Exception("Unable to create the product.");
+        }
+        
+        // Prepare the price fields
+        $priceFields = array(
+            'product_id' => $productId,
+            'price' => $price
+        );
+
+        // Insert the price into the 'prices' table
+        if (!$db->insert('prices', $priceFields)) {
+            throw new Exception("Unable to insert the price.");
         }
     }
 
@@ -57,11 +77,16 @@ class Product
 
         $db = Database::getInstance();
 
+        // Delete the related records from the 'prices' table
+        if (!$db->delete('prices', array('product_id', '=', $product_id))) {
+            throw new Exception('There was a problem deleting the price.');
+        }
+
+        // Delete the product from the 'products' table
         if (!$db->delete('products', array('product_id', '=', $product_id))) {
             throw new Exception('There was a problem deleting the product.');
         }
     }
-
     public static function getAllProducts()
     {
         $products = Database::getInstance()->query("SELECT * FROM products ORDER BY product_id ASC");

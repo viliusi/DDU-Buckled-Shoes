@@ -28,9 +28,9 @@
     $product = Product::getProductById($product_id);
     echo "<h3>" . $product->name . "</h3>";
     echo "<p>" . $product->description . "</p>";
-    echo "<p>Price: $" . $product->price . "</p>";
+    echo "<p>Price: $" . Product::getCurrentPrice($product->product_id) . "</p>";
     echo "<p>Quantity: " . $quantity . "</p>";
-    $total_price += $product->price * $quantity;
+    $total_price += Product::getCurrentPrice($product->product_id) * $quantity;
   }
   echo "<p>Total price: $$total_price</p>";
   $tax_cut = $total_price * 0.2;
