@@ -1,3 +1,4 @@
+</style>
 <?php
 // Check if the order_id is set in the URL
 if (!isset($_GET['order_id'])) {
@@ -9,37 +10,41 @@ $order_id = $_GET['order_id'];
 // Fetch the order from the database
 $order = Order::getOrderById($order_id);
 
-var_dump($order);
-
 if ($order === null) {
     die('Order not found');
 }
 
-// Check if the time property exists before trying to echo it
+echo "<h4>Order Date: " . $order->time . "</h4><br><br>";
 
-echo "<br><br>Order Date: " . $order->time . "<br>";
-
-// Initialize total order price
 $totalOrderPrice = 0;
 
-// Check if the products property exists and is a string before trying to parse it
 if (isset($order->products) && is_string($order->products)) {
-    // Parse the products string into an array of product IDs and quantities
     $products = explode(';', trim($order->products, ';'));
-    foreach ($products as $product) {
-        list($product_id, $quantity) = explode(',', $product);
 
-        // Fetch the price for the product from the database
-        $productPrice = Product::getProductPriceById($product_id);
+    foreach ($products as $product_info) { 
+        list($quantity, $id) = explode(',', $product_info); 
 
-        // Calculate the total price for this product and add it to the total order price
-        $totalOrderPrice += $productPrice * $quantity;
+        $price_for_the_product = Product::getCurrentPrice($id);
 
-        echo "Product ID: " . $quantity . "<br>";
-        echo "Product Quantity: " . $product_id . "<br>";
-        echo "Product Price: " . $productPrice . "<br>" . "<br>";
+        $totalOrderPrice += $price_for_the_product * $quantity;
+
+        // Fetch the product details from the database
+        $product = Product::getProductById($id); 
+
+        echo "Product Name: " . $product->name . "<br>"; 
+        echo "Product Description: " . $product->description . "<br>";
+        echo "Product Quantity: " . $quantity . "<br>";
+        echo "Product Variation: " . "<br>";
+        echo "Product Price: " . "$" . $price_for_the_product . "<br>";
+        // Fetch the images for the product
+        $images = Product::getImagesByProductId($id);
+        foreach ($images->results() as $image) {
+            echo "<div class='imageAlignment'>";
+            echo "<img src='" . $image->image_location . "' width='30%' height='30%'><br>";
+            echo "</div>" . "<br>" . "<br>";
+        }
     }
 }
 
-echo "Total Order Price: " . $totalOrderPrice . "<br>";
+echo "<h4>Total Order Price: " . "$" . $totalOrderPrice . "</h4><br>";
 ?>

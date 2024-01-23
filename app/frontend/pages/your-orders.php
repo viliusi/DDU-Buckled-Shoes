@@ -44,9 +44,9 @@
                 if ($product !== null) {
                     echo "<tr>";
                     echo "<td>" . $product->name . "</td>";
-                    echo "<td>" . $product->price . "</td>";
+                    echo "<td>" . Product::getCurrentPrice($product->product_id) . "</td>";
                     echo "<td>" . $quantity . "</td>";
-                    $subtotal = $product->price * $quantity;
+                    $subtotal = Product::getCurrentPrice($product->product_id) * $quantity;
                     $total += $subtotal;
                     echo "<td>" . $subtotal . "</td>";
                     echo "</tr>";
