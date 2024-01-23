@@ -12,14 +12,20 @@ class Product
         unset($fields['price']);
 
         // Insert the product without the price
-        $productId = $db->insert('products', $fields);
-        if (!$productId) {
-            throw new Exception("Unable to create the product.");
+        if (!$db->insert('products', $fields)) {
+            throw new Exception("Unable to insert the product.");
         }
-        
+
+        // Get the product ID of the product that was just inserted
+        $products = Product::getAllProducts();
+
+        $product = $products->last();
+
+        var_dump($product);
+
         // Prepare the price fields
         $priceFields = array(
-            'product_id' => $productId,
+            'product_id' => $product->product_id,
             'price' => $price
         );
 
