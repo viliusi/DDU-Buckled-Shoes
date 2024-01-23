@@ -22,15 +22,37 @@ $products = Product::getAllProducts(); // Replace with your method to get all pr
 
         <?php foreach ($variations as $variation) { ?>
             <tr>
-                <td><?php echo $product->name; ?></td>
-                <td><?php echo $variation->name; ?></td>
+                <td>
+                    <?php echo $product->name; ?>
+                </td>
+                <td>
+                    <?php echo $variation->name; ?>
+                </td>
                 <?php $originalPrice = Product::getOriginalPrice($product->product_id); ?>
-                <td><?php echo $originalPrice; ?></td>
+                <td>
+                    <?php echo $originalPrice; ?>
+                </td>
                 <?php $discount = Product::getDiscount($product->product_id); ?>
-                <td> <input id="discount" type="number" name="discount" value="<?php echo Product::getDiscount($product->product_id); ?>"></td>
-                <td><?php echo $originalPrice * (1 - $discount / 100); ?></td>
-                <td id="price"></td>
-                <td><?php echo $variation->stock; ?></td>
+
+                <td><input class="discount" type="number" name="discount" value="<?php echo $discount; ?>"></td>
+                <td>
+                    <?php echo $originalPrice * (1 - $discount / 100); ?>
+                </td>
+                <td class="price"></td>
+
+                <script>
+                    document.getElementsByClassName('discount')[<?php echo $index; ?>].addEventListener('input', function () {
+                        var originalPrice = <?php echo $originalPrice; ?>;
+                        var discount = this.value;
+                        var price = originalPrice * ((100 - discount) / 100);
+                        print(price);
+                        document.getElementsByClassName('price')[<?php echo $index; ?>].textContent = price;
+                    });
+                </script>
+
+                <td>
+                    <?php echo $variation->stock; ?>
+                </td>
                 <td>
                     <form method="post" action="add_stock.php">
                         <input type="hidden" name="variation_id" value="<?php echo $variation->id; ?>">
@@ -43,11 +65,5 @@ $products = Product::getAllProducts(); // Replace with your method to get all pr
     <?php } ?>
 </table>
 
-<script>
-document.getElementById('discount').addEventListener('input', function() {
-    var originalPrice = <?php echo $originalPrice; ?>;
-    var discount = this.value;
-    var price = originalPrice * (1 - discount / 100);
-    document.getElementById('price').textContent = price.toFixed(2);
-});
+
 </script>
