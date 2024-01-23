@@ -8,19 +8,28 @@ $products = Product::getAllProducts(); // Replace with your method to get all pr
         <th>Variation</th>
         <th>Original Price</th>
         <th>Discount (%)</th>
+        <th>Current Price</th>
         <th>New Price</th>
         <th>Stock</th>
         <th>Add Stock</th>
     </tr>
-    <?php foreach ($products as $product): ?>
-        <?php $variations = Product::getVariationsByProductId($product->product_id); ?>
-        <?php foreach ($variations as $variation): ?>
+    <?php foreach ($products->results() as $product) { ?>
+        <?php $variations = Product::getProductVariationsById($product->product_id); ?>
+
+        <?php usort($variations, function ($a, $b) {
+            return $a->name <=> $b->name;
+        }); ?>
+
+        <?php foreach ($variations as $variation) { ?>
             <tr>
                 <td><?php echo $product->name; ?></td>
                 <td><?php echo $variation->name; ?></td>
-                <td><?php echo $variation->originalPrice; ?></td>
-                <td><?php echo $variation->discount; ?></td>
-                <td><?php echo $variation->originalPrice * (1 - $variation->discount / 100); ?></td>
+                <?php $originalPrice = Product::getOriginalPrice($product->product_id); ?>
+                <td><?php echo $originalPrice; ?></td>
+                <?php $discount = Product::getDiscount($product->product_id); ?>
+                <td> <input id="discount" type="number" name="discount" value="<?php echo Product::getDiscount($product->product_id); ?>"></td>
+                <td><?php echo $originalPrice * (1 - $discount / 100); ?></td>
+                <td id="price"></td>
                 <td><?php echo $variation->stock; ?></td>
                 <td>
                     <form method="post" action="add_stock.php">
@@ -30,6 +39,15 @@ $products = Product::getAllProducts(); // Replace with your method to get all pr
                     </form>
                 </td>
             </tr>
-        <?php endforeach; ?>
-    <?php endforeach; ?>
+        <?php } ?>
+    <?php } ?>
 </table>
+
+<script>
+document.getElementById('discount').addEventListener('input', function() {
+    var originalPrice = <?php echo $originalPrice; ?>;
+    var discount = this.value;
+    var price = originalPrice * (1 - discount / 100);
+    document.getElementById('price').textContent = price.toFixed(2);
+});
+</script>
