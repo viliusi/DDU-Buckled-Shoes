@@ -31,10 +31,16 @@ if ($products) {
                             }
                             ?>
                             <div class="pricetag">
-                                <?php $price = Product::getCurrentPrice($product['product_id']) ?>
-                                <?php echo "$" . $price; ?>
-                                    <?php $priceO = Product::getOriginalPrice($product['product_id']) ?>
-                                    <?php echo "<span>$" . $priceO . "</span>"; ?>
+                                <?php
+                                $price = Product::getCurrentPrice($product['product_id']);
+                                $priceO = Product::getOriginalPrice($product['product_id']);
+
+                                echo "$" . $price;
+
+                                if ($price != $priceO) {
+                                    echo "<span> $" . $priceO . "</span>";
+                                }
+                                ?>
 
                                 <?php /* $discount = Product::getDiscount($product['product_id']) */ ?>
                                 <?php /*echo $discount . "🍔";*/ ?>

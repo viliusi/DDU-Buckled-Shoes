@@ -136,30 +136,10 @@
     height: 100%;
     transition: transform 0.2s ease-in-out;
     border-radius: 10px;
-    clip-path: polygon(0 15%, 100% 15%, 100% 85%, 0 85%);
-    border-left: 5px solid yellow; 
-    border-bottom: 5px solid yellow;
 }
-/*
-.yellowBorder{
-    border-left: 5px solid yellow; 
-    border-bottom: 5px solid yellow;
-}
-*/
+
 #slideshow img:hover {
     transform: scale(1.05);
-}
-
-#imageButtons {
-    position: absolute;
-    bottom: 0; /* adjust as needed */
-    left: 0; /* adjust as needed */
-}
-
-.imageButton {
-    width: 100px; /* adjust as needed */
-    height: 50px; /* adjust as needed */
-    border-radius: 25px; /* adjust as needed */
 }
 
 #prevButton, #nextButton {
@@ -178,7 +158,6 @@
 #prevButton {
     left: 10px;
 }
-
 
 #nextButton {
     right: 10px;
