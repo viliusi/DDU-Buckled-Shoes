@@ -26,9 +26,14 @@ $product = Product::getProductById($product_id);
         <?php echo $discount . "%"; ?>
       </p>
       <select id="productVariations">
+        <option value="">Select a variation</option>
         <?php
-        $variations = Product::getVariationsByProductId($product_id);
-        var_dump($variations); // Debug line to check the returned value
+        $variations = Product::getProductVariationsById($product_id);
+
+        usort($variations, function ($a, $b) {
+          return $a->name <=> $b->name;
+        });
+
         foreach ($variations as $variation) {
         ?>
           <option value="<?php echo $variation->variation_id ?>"><?php echo $variation->name ?></option>
@@ -36,18 +41,21 @@ $product = Product::getProductById($product_id);
         }
         ?>
       </select>
-      <?php echo $variation->stock ?>
       <p id="stock"></p>
       <script>
         document.getElementById('productVariations').addEventListener('change', function() {
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', 'get_stock.php?variation_id=' + this.value, true);
-          xhr.onload = function() {
-            if (this.status == 200) {
-              document.getElementById('stock').textContent = this.responseText;
-            }
-          };
-          xhr.send();
+          if (this.value === "") {
+            document.getElementById('stock').textContent = "";
+            return;
+          }
+
+          fetch('get-stock.php?variation_id=' + this.value)
+            .then(response => response.text())
+            .then(data => {
+              var stockText = "Stock: " + data;
+              document.getElementById('stock').textContent = stockText;
+            })
+            .catch(error => console.error('Error:', error));
         });
       </script>
 
