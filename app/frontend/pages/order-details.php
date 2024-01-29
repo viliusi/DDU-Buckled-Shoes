@@ -30,11 +30,12 @@ if (isset($order->products) && is_string($order->products)) {
 
         // Fetch the product details from the database
         $product = Product::getProductById($id); 
+        $variation = Product::getVariationByVariationId($variation_id);
 
         echo "Product Name: " . $product->name . "<br>"; 
         echo "Product Description: " . $product->description . "<br>";
         echo "Product Quantity: " . $quantity . "<br>";
-        echo "Product Variation: " . "<br>";
+        echo "Product Variation: " . $variation->name . "<br>";
         echo "Product Price: " . "$" . $price_for_the_product . "<br>";
         // Fetch the images for the product
         $images = Product::getImagesByProductId($id);

@@ -227,5 +227,34 @@ class Product
         }
     }
 
+    public static function getVariationByVariationId($variation_id)
+    {
+        $variation = Database::getInstance()->get('product_variations', array('variation_id', '=', $variation_id))->first();
+        if ($variation !== null) {
+            return $variation; // Return the variation, not the product
+        }
+    }
+
+    public static function decreaseStock($variation_id, $quantity)
+    {
+        $db = Database::getInstance();
+
+        $variation = $db->get('product_variations', array('variation_id', '=', $variation_id))->first();
+
+        if ($variation !== null) {
+            $stock = $variation->stock;
+
+            $stock -= $quantity;
+
+            if ($stock < 0) {
+                $stock = 0;
+            }
+
+            if (!$db->update('product_variations', 'variation_id', $variation_id, array('stock' => $stock))) {
+                throw new Exception('There was a problem updating the stock.');
+            }
+        }
+    }
+
     // This file creates the products and gets all the products in a channel and the products by id.
 }

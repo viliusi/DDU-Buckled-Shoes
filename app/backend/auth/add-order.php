@@ -55,8 +55,28 @@ if (Input::exists()) {
                         $subtotal = $product->price * $quantity;
                         $total += $subtotal;
 
-                        $body .= "<tr><td>" . $product->name . "</td><td>" . $product->price . "</td><td>" . $quantity . "</td><td>" . $subtotal . "</td></tr>";
-                        $altBody .= "Name: " . $product->name . "\nPrice: " . $product->price . "\nQuantity: " . $quantity . "\nSubtotal: " . $subtotal . "\n-------------------\n";
+                        $body .= "<tr><td>" . $product->name . "</td><td>" . Product::getCurrentPrice($product->product_id) . "</td><td>" . $quantity . "</td><td>" . $subtotal . "</td></tr>";
+                        $altBody .= "Name: " . $product->name . "\nPrice: " . Product::getCurrentPrice($product->product_id) . "\nQuantity: " . $quantity . "\nSubtotal: " . $subtotal . "\n-------------------\n";
+                    }
+                }
+
+                foreach ($products as $product) {
+                    $product = explode(",", $product);
+                    $product_id = $product[1];
+                    $quantity = $product[0];
+                
+                    $product = Product::getProductById($product_id);
+                
+                    if ($product !== null) {
+                        $variation_id = $product->variation_id;
+                        // Decrease the stock of the product by the quantity ordered
+                        Product::decreaseStock($variation_id, $quantity);
+                
+                        $subtotal = $product->price * $quantity;
+                        $total += $subtotal;
+                
+                        $body .= "<tr><td>" . $product->name . "</td><td>" . Product::getCurrentPrice($product->product_id) . "</td><td>" . $quantity . "</td><td>" . $subtotal . "</td></tr>";
+                        $altBody .= "Name: " . $product->name . "\nPrice: " . Product::getCurrentPrice($product->product_id) . "\nQuantity: " . $quantity . "\nSubtotal: " . $subtotal . "\n-------------------\n";
                     }
                 }
 

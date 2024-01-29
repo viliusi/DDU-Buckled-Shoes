@@ -9,29 +9,73 @@
     $_SESSION['cart'] = [];
   }
 
-  // Add product to cart, increase or decrease quantity
+  // Add product to cart
   if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
-    $quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1; // Default to 1 if 'quantity' is not set
+    $variation_id = $_POST['variation_id'];
 
-    // Check if the product already exists in the cart
-    $product_exists_in_cart = false;
-    foreach ($_SESSION['cart'] as $key => &$item) {
-      if ($item['product_id'] == $product_id) {
-        // If the product exists, increase or decrease its quantity
-        $item['quantity'] += $quantity;
-        $product_exists_in_cart = true;
-        // If quantity is 0 or less, remove the product from the cart
-        if ($item['quantity'] <= 0) {
-          unset($_SESSION['cart'][$key]);
-        }
-        break;
+    // Use a combination of the product ID and the variation ID as the key
+    $key = $product_id . '-' . $variation_id;
+
+    $_SESSION['cart'][$key] = array(
+      'product_id' => $product_id,
+      'variation_id' => $variation_id,
+      'quantity' => 1
+    );
+
+    // Redirect back to the cart page
+    header('Location: cart.php');
+    exit;
+  }
+
+  // Remove product from cart
+  if (isset($_POST['remove_from_cart'])) {
+    $product_id = $_POST['product_id'];
+    $variation_id = $_POST['variation_id'];
+
+    // Use the same key to remove the item from the cart
+    $key = $product_id . '-' . $variation_id;
+
+    if (isset($_SESSION['cart'][$key])) {
+      unset($_SESSION['cart'][$key]);
+    }
+
+    // Redirect back to the cart page
+    header('Location: cart.php');
+    exit;
+  }
+  // Increment quantity of product in cart
+  if (isset($_POST['increment_quantity'])) {
+    $product_id = $_POST['product_id'];
+    $variation_id = $_POST['variation_id'];
+
+    // Use the same key to access the item in the cart
+    $key = $product_id . '-' . $variation_id;
+
+    if (isset($_SESSION['cart'][$key])) {
+      $current_stock = Product::getStockByVariationId($variation_id);
+      if ($_SESSION['cart'][$key]['quantity'] < $current_stock) {
+        $_SESSION['cart'][$key]['quantity'] += 1;
       }
     }
 
-    // If the product doesn't exist in the cart, add it
-    if (!$product_exists_in_cart && $quantity > 0) {
-      $_SESSION['cart'][] = ['product_id' => $product_id, 'quantity' => $quantity];
+    // Redirect back to the cart page
+    header('Location: cart.php');
+    exit;
+  }
+
+  // Decrement quantity of product in cart
+  if (isset($_POST['decrement_quantity'])) {
+    $product_id = $_POST['product_id'];
+    $variation_id = $_POST['variation_id'];
+
+    // Use a combination of the product ID and the variation ID as the key
+    $key = $product_id . '-' . $variation_id;
+
+    if (isset($_SESSION['cart'][$key]) && $_SESSION['cart'][$key]['quantity'] > 1) {
+      $_SESSION['cart'][$key]['quantity'] -= 1;
+    } else if (isset($_SESSION['cart'][$key]) && $_SESSION['cart'][$key]['quantity'] == 1) {
+      unset($_SESSION['cart'][$key]);
     }
 
     // Redirect back to the cart page
@@ -44,27 +88,17 @@
     $_SESSION['cart'] = [];
   }
 
-  // Remove product from cart
-  if (isset($_POST['remove_from_cart'])) {
-    if (isset($_POST['remove_from_cart'])) {
-      $product_id = $_POST['product_id'];
-      foreach ($_SESSION['cart'] as $key => $item) {
-        if ($item['product_id'] == $product_id) {
-          unset($_SESSION['cart'][$key]);
-          break;
-        }
-      }
-    }
-  }
-
   // Display the product in the cart
   $total_price = 0;
   if (!empty($_SESSION['cart'])) {
-    foreach ($_SESSION['cart'] as $item) {
+    foreach ($_SESSION['cart'] as $key => $item) {
       $product_id = $item['product_id'];
+      $variation_id = $item['variation_id'];
       $quantity = $item['quantity'];
 
       $product = Product::getProductById($product_id);
+      $variation = Product::getVariationByVariationId($variation_id);
+
       // Add product price to total price
       $total_price += Product::getCurrentPrice($product->product_id) * $quantity;
 
@@ -73,27 +107,29 @@
       echo "<p>" . $product->description . "</p>";
       echo "<p>Price: $" . Product::getCurrentPrice($product->product_id) . "</p>";
       echo "<p>Quantity: " . $quantity . "</p>";
+      echo "<p>Variation: " .  $variation->name . "</p>";
+  ?>
+      <!-- Remove from Cart -->
+      <form method="post" action="cart.php">
+        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+        <input type="hidden" name="variation_id" value="<?php echo $variation_id; ?>">
+        <input type="submit" name="remove_from_cart" value="Remove from Cart">
+      </form>
 
-      // Button to remove product from cart
-      echo "<form action='cart.php' method='post'>";
-      echo "<input type='hidden' name='product_id' value='$product_id'>";
-      echo "<input type='submit' name='remove_from_cart' value='Remove from Cart'>";
-      echo "</form>";
+      <!-- Add More of the Same Product -->
+      <form method="post" action="cart.php">
+        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+        <input type="hidden" name="variation_id" value="<?php echo $variation_id; ?>">
+        <input type="submit" name="increment_quantity" value="+1">
+      </form>
 
-
-      // Add more of the same product
-      echo "<form action='cart.php' method='post'>";
-      echo "<input type='hidden' name='product_id' value='$product_id'>";
-      echo "<input type='hidden' name='quantity' value='1'>";
-      echo "<input type='submit' name='add_to_cart' value='+1'>";
-      echo "</form>";
-
-      // Remove one of the same product
-      echo "<form action='cart.php' method='post'>";
-      echo "<input type='hidden' name='product_id' value='$product_id'>";
-      echo "<input type='hidden' name='quantity' value='-1'>";
-      echo "<input type='submit' name='add_to_cart' value='-1'>";
-      echo "</form>";
+      <!-- Remove One of the Same Product -->
+      <form method="post" action="cart.php">
+        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+        <input type="hidden" name="variation_id" value="<?php echo $variation_id; ?>">
+        <input type="submit" name="decrement_quantity" value="-1">
+      </form>
+  <?php
     }
 
     $tax_cut = $total_price * 0.2;

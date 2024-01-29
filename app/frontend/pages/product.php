@@ -44,23 +44,31 @@ $product = Product::getProductById($product_id);
       <p id="stock"></p>
       <script>
         document.getElementById('productVariations').addEventListener('change', function() {
+          var addToCartButton = document.querySelector('input[name="add_to_cart"]');
           if (this.value === "") {
             document.getElementById('stock').textContent = "";
             return;
           }
+
+          document.getElementById('selectedVariation').value = this.value;
 
           fetch('get-stock.php?variation_id=' + this.value)
             .then(response => response.text())
             .then(data => {
               var stockText = "Stock: " + data;
               document.getElementById('stock').textContent = stockText;
+
+              // If the stock is 0, disable the "Add to Cart" button. Otherwise, enable it.
+              document.querySelector('input[name="add_to_cart"]').disabled = (data == 0);
             })
             .catch(error => console.error('Error:', error));
         });
       </script>
 
-      <form action="cart.php" method="post">
+      <form method="post" action="cart.php">
         <input type="hidden" name="product_id" value="<?php echo $product->product_id ?>">
+        <input type="hidden" id="selectedVariation" name="variation_id">
+        <input type="hidden" name="quantity" value="1">
         <input type="submit" name="add_to_cart" value="Add to Cart">
       </form>
     </div>

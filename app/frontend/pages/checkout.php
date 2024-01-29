@@ -25,11 +25,14 @@
   foreach ($products as $item) {
     $product_id = $item['product_id'];
     $quantity = $item['quantity'];
+    $variation_id = $item['variation_id']; // Define $variation_id here
     $product = Product::getProductById($product_id);
+    $variation = Product::getVariationByVariationId($variation_id); // Define $variation here
     echo "<h3>" . $product->name . "</h3>";
     echo "<p>" . $product->description . "</p>";
     echo "<p>Price: $" . Product::getCurrentPrice($product->product_id) . "</p>";
     echo "<p>Quantity: " . $quantity . "</p>";
+    echo "<p> Variation: " . $variation->name . "</p>"; // Now $variation is defined
     $total_price += Product::getCurrentPrice($product->product_id) * $quantity;
   }
   echo "<p>Total price: $$total_price</p>";
