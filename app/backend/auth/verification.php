@@ -20,17 +20,7 @@ if (Input::exists()) {
             )
         ));
 
-        $given_verification_code = Input::get('verification_code');
-        $actual_verification_code = $user->getVerificationCode(Input::get('user_id'));
-
-        $verification;
-
-        if ($given_verification_code == $actual_verification_code) {
-            $verification = true;
-        } else {
-            $verification = false;
-        }
-
+        $verification = User::checkVerification(Input::get('user_id'), Input::get('verification_code'));
 
         if ($validate->passed() && $verification) {
             try {

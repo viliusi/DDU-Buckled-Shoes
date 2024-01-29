@@ -199,65 +199,66 @@ class User
 
     public static function checkVerificationByUsername($username)
     {
-        // check if user exists
-        $user = Database::getInstance()->get('users', array('username', '=', $username));
-        if (!$user->count()) {
-            return false;
-        }
-        
-        $user = $user->first();
-        $verified = $user->is_verified;
-        if ($verified == 1) {
-            return true;
-        } else {
-            return false;
+        try {
+            $db = Database::getInstance();
+            $user = $db->get('users', array('username', '=', $username))->first();
+            $user_id = $user->user_id;
+            $verification = $db->get('verifications', array('user_id', '=', $user_id))->first();
+            if ($verification) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception $e) {
+            // Handle the exception
+            error_log($e->getMessage());
+            return false; // or throw the exception again depending on your needs
         }
     }
 
     public static function getVerificationCode($user_id)
     {
-        $user = Database::getInstance()->get('users', array('user_id', '=', $user_id));
-        if ($user->count()) {
-            $user = $user->first();
-            return $user->verification_code;
-        } else {
-            throw new Exception('No user found with the provided user_id.');
-        }
+        $db = Database::getInstance();
+        $verification = $db->get('verifications', array('user_id', '=', $user_id))->first();
+        return $verification->verification_code;
     }
 
     public static function makeVerified($user_id)
     {
         $db = Database::getInstance();
-
-        $user = User::getUserById($user_id);
-
-        $user->is_verified = 1;
-        $user->verification_code = NULL;
-
-        if (!$db->update('users', 'user_id', $user_id, array('is_verified' => 1, 'verification_code' => NULL))) {
-            throw new Exception('There was a problem updating the user.');
+        if (!$db->delete('verifications', array('user_id', '=', $user_id))) {
+            throw new Exception('There was a problem deleting the verification entry.');
         }
     }
 
     public static function getUserIdByUsername($username)
     {
-        $user = Database::getInstance()->get('users', array('username', '=', $username));
-        $user = $user->first();
-
+        $db = Database::getInstance();
+        $user = $db->get('users', array('username', '=', $username))->first();
         return $user->user_id;
     }
 
     public static function createVerificationCode($user_id)
     {
+        $db = Database::getInstance();
+
         $verification_code = random_int(100000, 999999);
 
-        $user = User::getUserById($user_id);
-        $user->verification_code = $verification_code;
+        if (!$db->insert('verifications', array('user_id' => $user_id, 'verification_code' => $verification_code))) {
+            throw new Exception('There was a problem creating the verification code.');
+        }
+    }
 
+    public static function checkVerification($user_id, $verification_code)
+    {
         $db = Database::getInstance();
-        
-        if (!$db->update('users', 'user_id', $user_id, array('verification_code' => $verification_code))) {
-            throw new Exception('There was a problem updating the user.');
+
+        $verification = $db->get('verifications', array('user_id', '=', $user_id))->first();
+
+        if ($verification_code == $verification->verification_code) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -265,14 +266,10 @@ class User
     {
         $db = Database::getInstance();
 
-        $user = User::getUserById($user_id);
+        $verification_code = random_int(100000, 999999);
 
-        $user->is_verified = 0;
-
-        User::createVerificationCode($user_id);
-
-        if (!$db->update('users', 'user_id', $user_id, array('is_verified' => 0))) {
-            throw new Exception('There was a problem updating the user.');
+        if (!$db->update('verifications', 'user_id', $user_id, array('verification_code' => $verification_code))) {
+            throw new Exception('There was a problem updating the verification code.');
         }
     }
 
@@ -281,20 +278,20 @@ class User
         if (!$user_id && $user_id != 0) {
             throw new Exception('Missing user ID');
         }
-    
+
         $db = Database::getInstance();
-    
+
         // Disable foreign key checks
         $db->query("SET FOREIGN_KEY_CHECKS=0");
-    
+
         if (!$db->delete('users', array('user_id', '=', $user_id))) {
             throw new Exception('There was a problem deleting the user.');
         }
-    
+
         $db->delete('reviews', array('user_id', '=', $user_id));
         $db->delete('orders', array('user_id', '=', $user_id));
         $db->delete('users_sessions', array('user_id', '=', $user_id));
-    
+
         // Enable foreign key checks
         $db->query("SET FOREIGN_KEY_CHECKS=1");
     }
