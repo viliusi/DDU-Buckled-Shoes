@@ -39,7 +39,7 @@
       </div>
       <div id="imageButtons">
         <?php foreach ($productImages as $index => $image) : ?>
-          <button class="imageButton" data-index="<?php echo $index; ?>"><?php echo $index + 1; ?></button>
+          <button class="imageButton" data-index="<?php echo $index; ?>"></button>
         <?php endforeach; ?>
       </div>
     </div>
