@@ -237,23 +237,24 @@ class Product
 
     public static function decreaseStock($variation_id, $quantity)
     {
+        // Get the current stock
         $db = Database::getInstance();
-
-        $variation = $db->get('product_variations', array('variation_id', '=', $variation_id))->first();
-
-        if ($variation !== null) {
-            $stock = $variation->stock;
-
-            $stock -= $quantity;
-
-            if ($stock < 0) {
-                $stock = 0;
-            }
-
-            if (!$db->update('product_variations', 'variation_id', $variation_id, array('stock' => $stock))) {
-                throw new Exception('There was a problem updating the stock.');
-            }
+        $stmt = $db->getConnection()->prepare("SELECT stock FROM product_variations WHERE variation_id = ?");
+        $stmt->execute([$variation_id]);
+        $variation = $stmt->fetch();
+    
+        if (!$variation) {
+            throw new Exception("No product variation found with ID $variation_id");
         }
+    
+        $currentStock = $variation['stock'];
+    
+        // Calculate the new stock
+        $newStock = $currentStock - $quantity;
+    
+        // Update the stock
+        $stmt = $db->getConnection()->prepare("UPDATE product_variations SET stock = ? WHERE variation_id = ?");
+        $stmt->execute([$newStock, $variation_id]);
     }
 
     // This file creates the products and gets all the products in a channel and the products by id.

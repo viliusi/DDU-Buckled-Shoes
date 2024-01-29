@@ -32,7 +32,7 @@
     echo "<p>" . $product->description . "</p>";
     echo "<p>Price: $" . Product::getCurrentPrice($product->product_id) . "</p>";
     echo "<p>Quantity: " . $quantity . "</p>";
-    echo "<p> Variation: " . $variation->name . "</p>"; // Now $variation is defined
+    echo "<p>Variation: " . $variation->name . "</p>"; // Now $variation is defined
     $total_price += Product::getCurrentPrice($product->product_id) * $quantity;
   }
   echo "<p>Total price: $$total_price</p>";
@@ -47,13 +47,13 @@
     <?php
     $products = "";
     foreach ($_SESSION['cart'] as $item) {
-      $product_id = $item['product_id'];
-      $quantity = $item['quantity'];
-      $products .= $quantity . "," . $product_id . ";";
+      $products .= $item['quantity'] . "," . $item['product_id'] . "," . $item['variation_id'] . ";";
     }
     ?>
     <input type="hidden" id="products" name="products" value="<?php echo $products ?>">
     <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
     <input type="submit" value="Buy">
   </form>
+
+ 
 </div>
