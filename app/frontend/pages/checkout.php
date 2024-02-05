@@ -25,7 +25,7 @@
   foreach ($products as $item) {
     $product_id = $item['product_id'];
     $variation_id = $item['variation_id'];
-    $quantity = Product::getStockByVariationId($variation_id);
+    $quantity = $item['quantity'];
     $price = Product::getOriginalPrice($product_id);
     $discount = Product::getDiscount($product_id);
 
@@ -53,12 +53,27 @@
 
     <?php
     $products = "";
+    $stock_control = "";
     foreach ($_SESSION['cart'] as $item) {
-      $products .= $item['quantity'] . "," . $item['variation_name'] . "," . $item['price'] . "," . $item['discount'] . "," . $item['product_name'] . ";";
+      $product_id = $item['product_id'];
+      $variation_id = $item['variation_id'];
+      $quantity = $item['quantity'];
+      $price = Product::getOriginalPrice($product_id);
+      $discount = Product::getDiscount($product_id);
+
+      // Fetch product_name from the database
+      $product_name = Product::getProductName($product_id);
+
+      // Fetch variation_name from the database
+      $variation_name = Product::getVariationName($variation_id);
+
+      $products .= $quantity . "," . $variation_name . "," . $price . "," . $discount . "," . $product_name . ";";
+      $stock_control .= $quantity . "," . $variation_id . ";";
     }
     ?>
     <input type="hidden" id="products" name="products" value="<?php echo $products ?>">
     <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
+    <input type="hidden" name="stock_control" value="<?php echo $stock_control ?>">
     <input type="submit" value="Buy">
   </form>
 </div>

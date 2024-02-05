@@ -19,6 +19,12 @@ if (Input::exists()) {
                 'min' => 1,
                 'max' => 255,
             ),
+
+            'stock_control' => array(
+                'required' => true,
+                'min' => 1,
+                'max' => 255,
+            ),
         ));
 
         if ($validate->passed()) {
@@ -44,8 +50,18 @@ if (Input::exists()) {
                 $body .= "<table style='width:100%; border: 1px solid'>";
                 $altBody = "Thank you for your order!\n";
 
+                $stock_control = $_POST['stock_control'];
+                $stock_items = explode(';', $stock_control);
+
+                foreach ($stock_items as $item) {
+                    if (!empty($item)) {
+                        list($quantity, $variation_id) = explode(',', $item);
+                        Product::decreaseStock($variation_id, $quantity);
+                    }
+                }
+
                 foreach ($products as $item) {
-                    if (!preg_match('/^(\d+),([^,]+),(\d+),(\d+),([^,]+)$/', $item, $matches)) {
+                    if (!preg_match('/^(\d+),([^,]+),(\d+),(\d+),([^,]+),(\d+)$/', $item, $matches)) {
                         error_log("Invalid product item: $item");
                         continue;
                     }
