@@ -45,37 +45,31 @@ if (Input::exists()) {
                 $altBody = "Thank you for your order!\n";
 
                 foreach ($products as $item) {
-                    if (!preg_match('/^(\d+),(\d+),(\d+)$/', $item, $matches)) {
+                    if (!preg_match('/^(\d+),([^,]+),(\d+),(\d+),([^,]+)$/', $item, $matches)) {
                         error_log("Invalid product item: $item");
                         continue;
                     }
 
                     // $matches[0] is the entire match, $matches[1] is the first group, etc.
                     $quantity = $matches[1];
-                    $product_id = $matches[2];
-                    $variation_id = $matches[3];
+                    $variation_name = $matches[2];
+                    $price = $matches[3];
+                    $discount = $matches[4];
+                    $product_name = $matches[5];
 
-                    $product = Product::getProductById($product_id);
-
-                    if (!$product) {
-                        error_log("No product found with ID $product_id");
-                        continue;
-                    }
-
-                    Product::decreaseStock($variation_id, $quantity);
-
-                    $currentPrice = Product::getCurrentPrice($product->product_id);
-                    $subtotal = $currentPrice * $quantity;
+                    $subtotal = $price * $quantity;
                     $total += $subtotal;
 
                     $body .= "<tr>
-                                <td>{$product->name}</td>
-                                <td>{$currentPrice}</td>
+                                <td>{$product_name}</td>
+                                <td>{$variation_name}</td>
+                                <td>{$price}</td>
+                                <td>{$discount}%</td>
                                 <td>{$quantity}</td>
                                 <td>{$subtotal}</td>
                               </tr>";
 
-                    $altBody .= "Name: {$product->name}\nPrice: {$currentPrice}\nQuantity: {$quantity}\nSubtotal: {$subtotal}\n-------------------\n";
+                    $altBody .= "Product Name: {$product_name}\nVariation: {$variation_name}\nPrice: {$price}\nDiscount: {$discount}%\nQuantity: {$quantity}\nSubtotal: {$subtotal}\n-------------------\n";
                 }
 
                 $body .= "<tr><td colspan='4'><a href='http://buckledshoes.store/order-details.php?order_id=" . $order->order_id . "'><button>Details</button></a></td><td>Total: " . $total . "</td></tr>";

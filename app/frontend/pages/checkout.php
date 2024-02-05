@@ -24,16 +24,23 @@
   $total_price = 0;
   foreach ($products as $item) {
     $product_id = $item['product_id'];
-    $quantity = $item['quantity'];
-    $variation_id = $item['variation_id']; // Define $variation_id here
-    $product = Product::getProductById($product_id);
-    $variation = Product::getVariationByVariationId($variation_id); // Define $variation here
-    echo "<h3>" . $product->name . "</h3>";
-    echo "<p>" . $product->description . "</p>";
-    echo "<p>Price: $" . Product::getCurrentPrice($product->product_id) . "</p>";
+    $variation_id = $item['variation_id'];
+    $quantity = Product::getStockByVariationId($variation_id);
+    $price = Product::getOriginalPrice($product_id);
+    $discount = Product::getDiscount($product_id);
+
+    // Fetch product_name from the database
+    $product_name = Product::getProductName($product_id);
+
+    // Fetch variation_name from the database
+    $variation_name = Product::getVariationName($variation_id);
+
+    echo "<h3>" . $product_name . "</h3>";
+    echo "<p>Price: $" . $price . "</p>";
+    echo "<p>Discount: " . $discount . "%</p>";
     echo "<p>Quantity: " . $quantity . "</p>";
-    echo "<p>Variation: " . $variation->name . "</p>"; // Now $variation is defined
-    $total_price += Product::getCurrentPrice($product->product_id) * $quantity;
+    echo "<p>Variation: " . $variation_name . "</p>";
+    $total_price += $price * $quantity;
   }
   echo "<p>Total price: $$total_price</p>";
   $tax_cut = $total_price * 0.2;
@@ -47,13 +54,11 @@
     <?php
     $products = "";
     foreach ($_SESSION['cart'] as $item) {
-      $products .= $item['quantity'] . "," . $item['product_id'] . "," . $item['variation_id'] . ";";
+      $products .= $item['quantity'] . "," . $item['variation_name'] . "," . $item['price'] . "," . $item['discount'] . "," . $item['product_name'] . ";";
     }
     ?>
     <input type="hidden" id="products" name="products" value="<?php echo $products ?>">
     <input type="hidden" name="csrf_token" value="<?php echo Token::generate(); ?>">
     <input type="submit" value="Buy">
   </form>
-
- 
 </div>

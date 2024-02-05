@@ -239,22 +239,52 @@ class Product
     {
         // Get the current stock
         $db = Database::getInstance();
-        $stmt = $db->getConnection()->prepare("SELECT stock FROM product_variations WHERE variation_id = ?");
-        $stmt->execute([$variation_id]);
-        $variation = $stmt->fetch();
-    
+        $variation = $db->get('product_variations', array('variation_id', '=', $variation_id))->first();
+
         if (!$variation) {
             throw new Exception("No product variation found with ID $variation_id");
         }
-    
-        $currentStock = $variation['stock'];
-    
+
+        $currentStock = $variation->stock;
+
         // Calculate the new stock
         $newStock = $currentStock - $quantity;
-    
+
         // Update the stock
-        $stmt = $db->getConnection()->prepare("UPDATE product_variations SET stock = ? WHERE variation_id = ?");
-        $stmt->execute([$newStock, $variation_id]);
+        $db->update('product_variations', 'variation_id', $variation_id, array('stock' => $newStock));
+    }
+
+    public static function getProductName($product_id)
+    {
+        // Get the database instance
+        $db = Database::getInstance();
+
+        // Get the product
+        $product = $db->get('products', array('product_id', '=', $product_id))->first();
+
+        // If a product was found, return the product name
+        if ($product) {
+            return $product->name;
+        }
+
+        // If no product was found, throw an exception
+        throw new Exception("No product found with ID $product_id");
+    }
+
+    public static function getVariationName($variation_id)
+    {
+        // Get the database instance
+        $db = Database::getInstance();
+
+        // Get the variation
+        $variation = $db->get('product_variations', array('variation_id', '=', $variation_id))->first();
+
+        if (!$variation) {
+            throw new Exception("No variation found with ID $variation_id");
+        }
+
+        // Return the variation name
+        return $variation->name;
     }
 
     // This file creates the products and gets all the products in a channel and the products by id.
