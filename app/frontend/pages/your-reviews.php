@@ -16,6 +16,7 @@
 
     if ($reviews !== null && $reviews->count() > 0) {
         foreach ($reviews->results() as $review) {
+            echo "<div style='border: 1px solid; margin-bottom: 10px; padding: 10px;'>"; // Start of review div
             $product = Product::getProductById($review->product_id);
             echo "<h4>" . $product->name . "</h4>";
             echo $review->rating . "/5 Stars <br>";
@@ -24,7 +25,8 @@
                 ?>
                 <a href="manage-review.php?review_id=<?php echo $review->review_id ?>" class="btn btn-primary">Manage</a> <br><br>
                 <?php
-              }
+            }
+            echo "</div>"; // End of review div
         }
     } else {
         echo "No reviews found.";

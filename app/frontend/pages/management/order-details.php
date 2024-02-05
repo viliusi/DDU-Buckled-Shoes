@@ -33,41 +33,36 @@
 
     $products = explode(";", $products);
 
-    //echo $products->count() . " products found.";
     echo "<table style='width:100%; border: 1px solid'>";
     echo "<tr>";
-    echo "<th>ID</th>";
-    echo "<th>Name</th>";
-    echo "<th>Price</th>";
     echo "<th>Quantity</th>";
+    echo "<th>Variation Name</th>";
+    echo "<th>Price</th>";
+    echo "<th>Discount</th>";
+    echo "<th>Product Name</th>";
     echo "<th>Subtotal</th>";
     echo "</tr>";
     foreach ($products as $product) {
         $product = explode(",", $product);
-        $product_id = $product[1];
         $quantity = $product[0];
+        $variation_name = $product[1];
+        $price = $product[2];
+        $discount = $product[3];
+        $product_name = $product[4];
     
-        $product = Product::getProductById($product_id);
-    
-        if ($product !== null) {
-            echo "<tr>";
-            echo "<td>" . $product->product_id . "</td>";
-            echo "<td>" . $product->name . "</td>";
-            echo "<td>" . $product->price . "</td>";
-            echo "<td>" . $quantity . "</td>";
-            $subtotal = $product->price * $quantity;
-            $total += $subtotal;
-            echo "<td>" . $subtotal . "</td>";
-            echo "</tr>";
-        } else {
-            echo "<tr><td colspan='5'>Product with ID $product_id not found</td></tr>";
-        }
+        echo "<tr>";
+        echo "<td>" . $quantity . "</td>";
+        echo "<td>" . $variation_name . "</td>";
+        echo "<td>" . $price . "</td>";
+        echo "<td>" . $discount . "</td>";
+        echo "<td>" . $product_name . "</td>";
+        $subtotal = ($price - $discount) * $quantity;
+        $total += $subtotal;
+        echo "<td>" . $subtotal . "</td>";
+        echo "</tr>";
     }
     echo "<tr>";
-    echo "<th> Total </th>";
-    echo "<th> </th>";
-    echo "<th> </th>";
-    echo "<th> </th>";
+    echo "<th colspan='5'> Total </th>";
     echo "<th>" . $total . "</th>";
     echo "</tr>";
     echo "</table>";

@@ -17,12 +17,15 @@
 
     if ($orders !== null) {
         foreach ($orders as $order) {
+            echo "<div style='border: 1px solid; margin-bottom: 10px; padding: 10px;'>"; // Start of order div
             $products = explode(";", $order->products);
 
-            echo "<table style='width:100%; border: 1px solid'>";
+            echo "<table style='width:100%'>";
             echo "<tr>";
             echo "<th>Name</th>";
+            echo "<th>Variation Name</th>";
             echo "<th>Price</th>";
+            echo "<th>Discount</th>";
             echo "<th>Quantity</th>";
             echo "<th>Subtotal</th>";
             echo "</tr>";
@@ -32,33 +35,37 @@
             foreach ($products as $product) {
                 $product = explode(",", $product);
 
-                if (count($product) != 2) {
+                if (count($product) != 5) {
                     continue;
                 }
 
-                $product_id = $product[1];
                 $quantity = $product[0];
+                $variationName = $product[1];
+                $price = $product[2];
+                $discount = $product[3];
+                $productName = $product[4];
 
-                $product = Product::getProductById($product_id);
+                $subtotal = ($price - $discount) * $quantity;
+                $total += $subtotal;
 
-                if ($product !== null) {
-                    echo "<tr>";
-                    echo "<td>" . $product->name . "</td>";
-                    echo "<td>" . Product::getCurrentPrice($product->product_id) . "</td>";
-                    echo "<td>" . $quantity . "</td>";
-                    $subtotal = Product::getCurrentPrice($product->product_id) * $quantity;
-                    $total += $subtotal;
-                    echo "<td>" . $subtotal . "</td>";
-                    echo "</tr>";
-                }
+                echo "<tr>";
+                echo "<td>{$productName}</td>";
+                echo "<td>{$variationName}</td>";
+                echo "<td>{$price}</td>";
+                echo "<td>{$discount}</td>";
+                echo "<td>{$quantity}</td>";
+                echo "<td>{$subtotal}</td>";
+                echo "</tr>";
             }
 
             echo "<tr>";
-            echo "<td colspan='4'><a href='order-details.php?order_id=" . $order->order_id . "'><button>Details</button></a></td>";
-            echo "<td>Total: " . $total . "</td>";
+            echo "<td colspan='6'>Total</td>";
+            echo "<td>{$total}</td>";
             echo "</tr>";
             echo "</table>";
-            echo "<br>";
+            echo "<a href='order-details.php?order_id={$order->order_id}' class='btn btn-info'>Details</a>";
+            echo "<br><br>";
+            echo "</div>"; // End of order div
         }
     } else {
         echo "No orders found.";
