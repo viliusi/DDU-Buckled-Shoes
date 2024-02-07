@@ -17,11 +17,16 @@
     $pageName = str_replace(array('-', '_'), ' ', $pageName);
     $pageName = ucwords($pageName);
 
+    // Check if the current page is the index page
+    if ($pageName == 'Index') {
+        $pageName = 'Home';
+    }
+
     // Check if the current page is a product page
     if ($pageName == 'Product') {
-      $product_id = $_GET['product_id'];
-      $product = Product::getProductById($product_id);
-      $pageName = $product->name;
+        $product_id = $_GET['product_id'];
+        $product = Product::getProductById($product_id);
+        $pageName = $product->name;
     }
 
     echo $pageName;

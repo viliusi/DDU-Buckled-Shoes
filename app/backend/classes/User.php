@@ -295,4 +295,15 @@ class User
         // Enable foreign key checks
         $db->query("SET FOREIGN_KEY_CHECKS=1");
     }
+
+    public static function isVerified($user_id)
+    {
+        $db = Database::getInstance();
+        $verification = $db->get('verifications', array('user_id', '=', $user_id))->first();
+        if ($verification) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
