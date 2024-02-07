@@ -93,7 +93,7 @@ $product = Product::getProductById($product_id);
 
 <div class="row reviews">
   <div class="col-sm-4">
-    <h2>Reviews</h2>
+    <h2 class="reviewsHeader">Reviews</h2>
 
     <?php if ($user->isLoggedIn()) { ?>
       <a href="add-review.php?product_id=<?php echo $product_id ?>" class="btn btn-primary">Post a review</a> <br>
@@ -134,7 +134,7 @@ $product = Product::getProductById($product_id);
     <?php
       }
     } else {
-      echo "<p>No reviews for this product yet.</p>";
+      echo "<div class='noReviews'><p>No reviews for this product yet.</p></div>";
     }
 
     ?>

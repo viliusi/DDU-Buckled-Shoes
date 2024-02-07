@@ -23,20 +23,22 @@ if ($products) {
 
 <div id="slideshowContainer" class="slider">
   <div id="slideshowAndButtons">
-    <div id="slideshow">
-      <a id="slideshowLink" href="#">
-        <div style="display: flex; align-items: center; justify-content: flex-end; position: relative;">
-          <img id="slideshowImage" src="<?php echo isset($productImages[0]) ? $productImages[0] : ''; ?>" alt="Slideshow Image">
-          <div id="productName"></div>
-          <div class="shoe-name" style="color: #fff; text-align: right; position: absolute; top: 50%; transform: translateY(-50%); margin-right: 10px;"><?php echo isset($products[0]->product_name) ? addslashes($products[0]->product_name) : ''; ?></div>
+    <div id="slideshowWrapper">
+      <div id="slideshow">
+        <a id="slideshowLink" href="#">
+          <div style="display: flex; align-items: center; justify-content: flex-end; position: relative;">
+            <img id="slideshowImage" src="<?php echo isset($productImages[0]) ? $productImages[0] : ''; ?>" alt="Slideshow Image">
+            <div id="productName"></div>
+            <div class="shoe-name" style="color: #fff; text-align: right; position: absolute; top: 50%; transform: translateY(-50%); margin-right: 10px;"><?php echo isset($products[0]->product_name) ? addslashes($products[0]->product_name) : ''; ?></div>
+          </div>
+        </a>
+        <div class="menu-bar" style="display: flex; justify-content: space-between; margin-top: 10px;">
+          <?php
+          foreach ($products as $index => $product) {
+            echo '<div class="shoe-bar" data-index="' . $index . '" style="flex: 1; height: 5px; background-color: transparent; border: 2px solid transparent; border-radius: 10px; margin: 0 5px; transition: background-color 0.3s;"></div>';
+          }
+          ?>
         </div>
-      </a>
-      <div class="menu-bar" style="display: flex; justify-content: space-between; margin-top: 10px;">
-        <?php
-        foreach ($products as $index => $product) {
-          echo '<div class="shoe-bar" data-index="' . $index . '" style="flex: 1; height: 5px; background-color: transparent; border: 2px solid transparent; border-radius: 10px; margin: 0 5px; transition: background-color 0.3s;"></div>';
-        }
-        ?>
       </div>
       <button id="prevButton" style="position: absolute; top: 50%; transform: translateY(-50%); font-size: 20px; color: #fff; cursor: pointer; left: 10px; z-index: 1000;">‹</button>
       <button id="nextButton" style="position: absolute; top: 50%; transform: translateY(-50%); font-size: 20px; color: #fff; cursor: pointer; right: 10px; z-index: 1000;">›</button>
@@ -79,7 +81,7 @@ if ($products) {
   function changeImage() {
     currentImageIndex = (currentImageIndex + 1) % images.length;
     document.getElementById('slideshowImage').src = images[currentImageIndex];
-    document.getElementById('productName').textContent = productNames[currentImageIndex]; // Add this line
+    // document.getElementById('productName').textContent = productNames[currentImageIndex]; // Add this line
     updateActiveButton();
   }
 
@@ -94,7 +96,7 @@ if ($products) {
   document.getElementById('prevButton').addEventListener('click', function() {
     currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
     document.getElementById('slideshowImage').src = images[currentImageIndex];
-    document.getElementById('productName').textContent = productNames[currentImageIndex]; // Add this line
+    // document.getElementById('productName').textContent = productNames[currentImageIndex]; // Add this line
     updateActiveButton();
   });
 

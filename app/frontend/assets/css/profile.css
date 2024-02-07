@@ -105,6 +105,17 @@
     padding-bottom: 200px;
 }
 
+.review {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
 .product-box {
     transition: transform 0.3s;
 }
@@ -145,6 +156,58 @@
     border-bottom: 5px solid yellow;
 }
 
+.noReviews {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.reviewsHeader {
+    color: black;
+}
+
+@media screen and (max-width: 600px) {
+    /* This will apply when the screen width is 600px or less */
+    #slideshow img {
+        height: auto; /* Allow the height to scale down on smaller screens */
+    }
+    .noReviews {
+        position: absolute;
+        right: 187px;
+        display: flex;
+        flex-direction: column;
+        align-items: left; 
+        justify-content: center;
+        margin-top: 2px;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .reviews {
+        background-color: #D9D9D9;
+        color: black;
+        padding-bottom: 200px;
+    }
+
+    .review {
+        position: absolute;
+        right: 187px;
+        display: flex;
+        flex-direction: column;
+        align-items: left; 
+        justify-content: center;
+        margin-top: 2px;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 5px;
+    }
+}
 /*
 .yellowBorder {
     border-left: 5px solid yellow;
@@ -153,10 +216,8 @@
 */
 
 #slideshowAndButtons {
-    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
@@ -165,13 +226,16 @@
 }
 
 #imageButtons {
-    position: absolute;
-    bottom: -440px;
     display: flex;
     justify-content: center;
-    flex-wrap: nowrap;
-    width: 100%;
-    height: 100%;
+    margin-top: 20px; /* Adjust this value as needed */
+}
+
+#slideshowWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* This will center the slideshow */
 }
 
 .imageButton {
@@ -185,6 +249,21 @@
 .imageButton.active {
     background-color: #f2c744;
     width: 110px;
+}
+
+/* Add this media query for smaller screens */
+@media screen and (max-width: 600px) {
+    #imageButtons {
+        margin-top: -200px; /* Adjust this value as needed */
+    }
+
+    .imageButton {
+        width: 50px; /* Adjust this value as needed */
+    }
+
+    .imageButton.active {
+        width: 60px; /* Adjust this value as needed */
+    }
 }
 
 #prevButton,
