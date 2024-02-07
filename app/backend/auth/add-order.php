@@ -46,54 +46,59 @@ if (Input::exists()) {
                 $products = explode(";", $products);
 
                 $total = 0;
-                $body = "<p>Thank you for your order!</p>";
-                $body .= "<table style='width:100%; border: 1px solid'>";
-                $altBody = "Thank you for your order!\n";
+                $body = "<div class='container' style='margin-top:30px'>
+                            <h2>Order Details</h2>";
 
-                $stock_control = $_POST['stock_control'];
-                $stock_items = explode(';', $stock_control);
-
-                foreach ($stock_items as $item) {
-                    if (!empty($item)) {
-                        list($quantity, $variation_id) = explode(',', $item);
-                        Product::decreaseStock($variation_id, $quantity);
-                    }
-                }
+                $body .= "<style>
+                            .product-box {
+                                border: 1px solid #fff;
+                                padding: 10px;
+                                margin-bottom: 10px;
+                            }
+        
+                            .product-box h3 {
+                                margin: 0;
+                                padding-bottom: 10px;
+                                border-bottom: 1px solid #fff;
+                            }
+        
+                            .product-box p {
+                                margin: 5px 0;
+                            }
+                          </style>";
 
                 foreach ($products as $item) {
-                    if (!preg_match('/^(\d+),([^,]+),(\d+),(\d+),([^,]+),(\d+)$/', $item, $matches)) {
-                        error_log("Invalid product item: $item");
-                        continue;
-                    }
+                    $product_details = explode(",", $item);
 
-                    // $matches[0] is the entire match, $matches[1] is the first group, etc.
-                    $quantity = $matches[1];
-                    $variation_name = $matches[2];
-                    $price = $matches[3];
-                    $discount = $matches[4];
-                    $product_name = $matches[5];
+                    $quantity = $product_details[0];
+                    $variation_name = $product_details[1];
+                    $price = $product_details[2];
+                    $discount = $product_details[3];
+                    $product_name = $product_details[4];
 
-                    $subtotal = $price * $quantity;
+                    $price_at_purchase = $price * (100 - $discount) / 100;
+                    $subtotal = $price_at_purchase * $quantity;
                     $total += $subtotal;
 
-                    $body .= "<tr>
-                                <td>{$product_name}</td>
-                                <td>{$variation_name}</td>
-                                <td>{$price}</td>
-                                <td>{$discount}%</td>
-                                <td>{$quantity}</td>
-                                <td>{$subtotal}</td>
-                              </tr>";
-
-                    $altBody .= "Product Name: {$product_name}\nVariation: {$variation_name}\nPrice: {$price}\nDiscount: {$discount}%\nQuantity: {$quantity}\nSubtotal: {$subtotal}\n-------------------\n";
+                    $body .= "<div class='product-box'>
+                                <h3>" . $product_name . "</h3>
+                                <p><strong>Variation:</strong> " . $variation_name . "</p>
+                                <p><strong>Quantity:</strong> " . $quantity . "</p>";
+                    if ($discount > 0) {
+                        $body .= "<p><strong>Price:</strong> <s>" . $price . "</s> " . $price_at_purchase . " (Discount: " . $discount . "%)</p>";
+                    } else {
+                        $body .= "<p><strong>Price:</strong> " . $price . "</p>";
+                    }
+                    $body .= "<p><strong>Subtotal:</strong> " . $subtotal . "</p>
+                            </div>";
                 }
 
-                $body .= "<tr><td colspan='4'><a href='http://buckledshoes.store/order-details.php?order_id=" . $order->order_id . "'><button>Details</button></a></td><td>Total: " . $total . "</td></tr>";
-                $body .= "</table><br>";
-                $body .= "<p>We appreciate your business. If you have any questions, please don't hesitate to contact us.</p>";
+                $body .= "<div class='total-box'>
+                            <h3>Total: " . $total . "</h3>
+                          </div>";
 
-                $altBody .= "Order Details: http://buckledshoes.store/order-details.php?order_id=" . $order->order_id . "\nTotal: " . $total . "\n";
-                $altBody .= "We appreciate your business. If you have any questions, please don't hesitate to contact us.\n";
+                $body .= "<br> <br>
+                        </div>";
 
                 Mail::send(User::getUserById(Input::get('user_id'))->email, $subject, $body, $altBody);
 
