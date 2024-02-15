@@ -4,6 +4,16 @@ $product_id = $_GET['product_id'];
 $product = Product::getProductById($product_id);
 ?>
 
+<style>
+  .NoReviews {
+    margin: auto;
+    margin-top: 20vh;
+    margin-bottom: 20vh;
+    width: 50%;
+    padding: 10px;
+  }
+</style>
+
 <div class="split">
   <div class="row">
     <div class="col-sm-4">
@@ -51,10 +61,16 @@ $product = Product::getProductById($product_id);
       </select>
       <p id="stock"></p>
       <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          var addToCartButton = document.querySelector('input[name="add_to_cart"]');
+          addToCartButton.disabled = true; // Disable the "Add to Cart" button initially
+        });
+
         document.getElementById('productVariations').addEventListener('change', function () {
           var addToCartButton = document.querySelector('input[name="add_to_cart"]');
           if (this.value === "") {
             document.getElementById('stock').textContent = "";
+            addToCartButton.disabled = true; // Disable the "Add to Cart" button
             return;
           }
 
@@ -67,7 +83,7 @@ $product = Product::getProductById($product_id);
               document.getElementById('stock').textContent = stockText;
 
               // If the stock is 0, disable the "Add to Cart" button. Otherwise, enable it.
-              document.querySelector('input[name="add_to_cart"]').disabled = (data == 0);
+              addToCartButton.disabled = (data == 0);
             })
             .catch(error => console.error('Error:', error));
         });
@@ -142,7 +158,7 @@ $product = Product::getProductById($product_id);
         <?php
       }
     } else {
-      echo "<div class='noReviews'><p>No reviews for this product yet.</p></div>";
+      echo "<h3 class='NoReviews'>No reviews for this product yet.</h3>";
     }
 
     ?>

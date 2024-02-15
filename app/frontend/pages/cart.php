@@ -127,10 +127,10 @@
     }
 
     .new-price {
-    font-size: 1em;
-    font-weight: bold;
-    /* Make the new price text bold */
-  }
+      font-size: 1em;
+      font-weight: bold;
+      /* Make the new price text bold */
+    }
 
     .custom-hr {
       border-width: 1px;
@@ -370,7 +370,7 @@ if (!empty($_SESSION['cart'])) {
     </div>
     <div class="col-sm-4" style="background-color: #D9D9D9; padding-bottom: 15px; padding-top: 15px;">
       <div class="purchase-box">
-        <h1>Purchase Product</h1>
+        <h1>Purchase Products</h1>
         <div class="slogan-box">
           <h2>All our products are made of the finest Taiwanese Children by Taiwanese Children <br>
             In the case of a defective product returns are always possible*</h2>
@@ -403,7 +403,12 @@ if (!empty($_SESSION['cart'])) {
 
   <?php
 } else {
-  echo "<h3>Your cart is empty</h3>";
+  echo "<h3 style='margin: auto;
+  margin-top: 20vh;
+  margin-bottom: 20vh;
+  width: 50%;
+  padding: 10px;
+  text-align: center;'>Your cart is empty</h3>";
 }
-
+?>
 
