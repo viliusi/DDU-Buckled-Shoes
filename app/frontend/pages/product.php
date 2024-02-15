@@ -22,12 +22,12 @@ $product = Product::getProductById($product_id);
       $discount = Product::getDiscount($product_id);
 
       if ($discount > 0) {
-        echo "<span>$" . $price . "</span>";
-        echo "<span style='text-decoration: line-through; font-style: italic;'> $" . $priceO . "</span>";
+        echo "<span class='old-price' style='font-size: 0.8em; text-decoration: line-through; margin-right: 10px;'>$" . $priceO . "</span><br class='mobile-break'>";
+        echo "<span class='new-price'>$" . $price . "</span>";
       } else {
-        echo "$" . $price;
+        echo "<span class='new-price'>$" . $price . "</span>";
       }
-      echo $discount . "%";
+
       ?>
 
 
