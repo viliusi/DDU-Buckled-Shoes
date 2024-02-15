@@ -1,6 +1,6 @@
 <div class="container" style="margin-top:30px">
   <h2>Users</h2>
-
+  
   <?php
   $users = User::getAllUsers();
   if ($users->count()) {
@@ -33,6 +33,5 @@
   } else {
     echo "No users found.";
   }
-
   ?>
 </div>

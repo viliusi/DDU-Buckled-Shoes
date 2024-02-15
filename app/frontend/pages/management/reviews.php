@@ -13,6 +13,7 @@
     echo "<th>Username</th>";
     echo "<th>Text</th>";
     echo "<th>Timestamp</th>";
+    echo "<th>Action</th>";
     echo "</tr>";
     foreach ($reviews->results() as $review) {
       // build a table with the results, printing the variables "name", "price", "category" and "description"
@@ -23,6 +24,12 @@
       echo "<td>" . User::getUserById($review->user_id)->username . "</td>";
       echo "<td>" . $review->text . "</td>";
       echo "<td>" . $review->time . "</td>";
+      echo "<td>";
+      echo "<form method='post'>";
+      echo "<input type='hidden' name='review_id' value='" . $review->review_id . "' />";
+      echo "<input type='submit' name='delete' value='Delete Review' />";
+      echo "</form>";
+      echo "</td>";
       echo "</tr>";
     }
     echo "</table>";
@@ -32,3 +39,15 @@
   ?>
 
 </div>
+
+<?php
+
+function delete()
+{
+    Review::delete($_POST['review_id']);
+    Redirect::to('management-reviews.php');
+}
+if (array_key_exists('delete', $_POST)) {
+    delete();
+}
+?>

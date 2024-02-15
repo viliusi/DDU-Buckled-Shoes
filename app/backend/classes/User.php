@@ -291,6 +291,7 @@ class User
         $db->delete('reviews', array('user_id', '=', $user_id));
         $db->delete('orders', array('user_id', '=', $user_id));
         $db->delete('users_sessions', array('user_id', '=', $user_id));
+        $db->delete('verifications', array('user_id', '=', $user_id));
 
         // Enable foreign key checks
         $db->query("SET FOREIGN_KEY_CHECKS=1");

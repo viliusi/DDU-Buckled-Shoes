@@ -146,7 +146,8 @@ class Database
 
     public function first()
     {
-        return $this->results()[0];
+        $results = $this->results();
+        return (!empty($results)) ? $results[0] : null;
     }
 
     public function last()
