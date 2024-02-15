@@ -15,16 +15,22 @@ $product = Product::getProductById($product_id);
       <p>
         <?php echo $product->description ?>
       </p>
-      <p>
-        <?php $price = Product::getCurrentPrice($product_id) ?>
-        <?php echo "$" . $price; ?>
 
-        <?php $priceO = Product::getOriginalPrice($product_id) ?>
-        <?php echo "$" . $priceO; ?>
+      <?php
+      $price = Product::getCurrentPrice($product_id);
+      $priceO = Product::getOriginalPrice($product_id);
+      $discount = Product::getDiscount($product_id);
 
-        <?php $discount = Product::getDiscount($product_id) ?>
-        <?php echo $discount . "%"; ?>
-      </p>
+      if ($discount > 0) {
+        echo "<span>$" . $price . "</span>";
+        echo "<span style='text-decoration: line-through; font-style: italic;'> $" . $priceO . "</span>";
+      } else {
+        echo "$" . $price;
+      }
+      echo $discount . "%";
+      ?>
+
+
       <select id="productVariations">
         <option value="">Select a variation</option>
         <?php
@@ -35,15 +41,17 @@ $product = Product::getProductById($product_id);
         });
 
         foreach ($variations as $variation) {
-        ?>
-          <option value="<?php echo $variation->variation_id ?>"><?php echo $variation->name ?></option>
-        <?php
+          ?>
+          <option value="<?php echo $variation->variation_id ?>">
+            <?php echo $variation->name ?>
+          </option>
+          <?php
         }
         ?>
       </select>
       <p id="stock"></p>
       <script>
-        document.getElementById('productVariations').addEventListener('change', function() {
+        document.getElementById('productVariations').addEventListener('change', function () {
           var addToCartButton = document.querySelector('input[name="add_to_cart"]');
           if (this.value === "") {
             document.getElementById('stock').textContent = "";
@@ -78,13 +86,13 @@ $product = Product::getProductById($product_id);
 
   $images = Product::getImagesByProductId($product_id);
   foreach ($images->results() as $image) {
-  ?>
+    ?>
     <div class="imageAlignment">
       <?php
       echo "<img src='" . $image->image_location . "' width='100%' height='100%'>" . "<br>";
       ?>
     </div>
-  <?php
+    <?php
   }
 
   ?>
@@ -103,7 +111,7 @@ $product = Product::getProductById($product_id);
     $reviews = Review::getReviewsByProductId($product_id);
     if ($reviews !== null && $reviews->count() > 0) {
       foreach ($reviews->results() as $review) {
-    ?>
+        ?>
         <div class="review">
           <p>
             <?php echo $review->rating ?>/5
@@ -123,15 +131,15 @@ $product = Product::getProductById($product_id);
 
           if ($user->isLoggedIn()) {
             if ($user->data()->user_id == $review->user_id) {
-          ?>
+              ?>
               <a href="manage-review.php?review_id=<?php echo $review->review_id ?>" class="btn btn-primary">Manage</a>
-          <?php
+              <?php
             }
           }
 
           ?>
         </div>
-    <?php
+        <?php
       }
     } else {
       echo "<div class='noReviews'><p>No reviews for this product yet.</p></div>";
