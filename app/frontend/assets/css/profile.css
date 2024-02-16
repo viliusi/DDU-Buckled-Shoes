@@ -300,3 +300,21 @@
 .sliderContainer {
     max-height: fit-content;
 }
+
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+  
+.box {
+    border: 1px solid;
+    background-color: aliceblue;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.box.selected {
+    background-color: #727272;
+}

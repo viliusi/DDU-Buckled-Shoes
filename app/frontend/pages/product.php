@@ -41,42 +41,80 @@ $product = Product::getProductById($product_id);
       ?>
 
 
-      <select id="productVariations">
-        <option value="">Select a variation</option>
-        <?php
-        $variations = Product::getProductVariationsById($product_id);
+      <?php
+      $variations = Product::getProductVariationsById($product_id);
 
-        usort($variations, function ($a, $b) {
-          return $a->name <=> $b->name;
-        });
+      usort($variations, function ($a, $b) {
+        return $a->name <=> $b->name;
+      });
 
-        foreach ($variations as $variation) {
-          ?>
-          <option value="<?php echo $variation->variation_id ?>">
-            <?php echo $variation->name ?>
-          </option>
-          <?php
+      $textBasedNames = array_filter($variations, function ($variation) {
+        return !is_numeric($variation->name);
+      });
+
+      if (count($textBasedNames) > 0) {
+        echo '<select id="productVariations">';
+        echo '<option value="">Select a variation</option>';
+
+        foreach ($textBasedNames as $variation) {
+          echo '<option value="' . $variation->variation_id . '">' . $variation->name . '</option>';
         }
-        ?>
-      </select>
+
+        echo '</select>';
+      }
+
+      echo '<div class="box-container">';
+
+      $numericNames = array_filter($variations, function ($variation) {
+        return is_numeric($variation->name);
+      });
+
+      foreach ($numericNames as $variation) {
+        $floatValue = floatval($variation->name);
+        echo '<div class="box" data-value="' . $variation->variation_id . '">' . $floatValue . '</div>';
+      }
+
+      echo '</div>';
+      ?>
       <p id="stock"></p>
       <script>
         document.addEventListener('DOMContentLoaded', (event) => {
           var addToCartButton = document.querySelector('input[name="add_to_cart"]');
           addToCartButton.disabled = true; // Disable the "Add to Cart" button initially
+
+          var boxes = document.querySelectorAll('.box');
+
+          boxes.forEach(function(box) {
+            box.addEventListener('click', function() {
+              // Remove the 'selected' class from all boxes
+              boxes.forEach(function(otherBox) {
+                otherBox.classList.remove('selected');
+              });
+
+              // Add the 'selected' class to the clicked box
+              this.classList.add('selected');
+
+              var value = this.getAttribute('data-value');
+              handleSelect(value);
+            });
+          });
+
+          document.getElementById('productVariations').addEventListener('change', function() {
+            handleSelect(this.value);
+          });
         });
 
-        document.getElementById('productVariations').addEventListener('change', function () {
+        function handleSelect(value) {
           var addToCartButton = document.querySelector('input[name="add_to_cart"]');
-          if (this.value === "") {
+          if (value === "") {
             document.getElementById('stock').textContent = "";
             addToCartButton.disabled = true; // Disable the "Add to Cart" button
             return;
           }
 
-          document.getElementById('selectedVariation').value = this.value;
+          document.getElementById('selectedVariation').value = value;
 
-          fetch('get-stock.php?variation_id=' + this.value)
+          fetch('get-stock.php?variation_id=' + value)
             .then(response => response.text())
             .then(data => {
               var stockText = "Stock: " + data;
@@ -86,7 +124,7 @@ $product = Product::getProductById($product_id);
               addToCartButton.disabled = (data == 0);
             })
             .catch(error => console.error('Error:', error));
-        });
+        }
       </script>
 
       <form method="post" action="cart.php">
@@ -102,13 +140,13 @@ $product = Product::getProductById($product_id);
 
   $images = Product::getImagesByProductId($product_id);
   foreach ($images->results() as $image) {
-    ?>
+  ?>
     <div class="imageAlignment">
       <?php
       echo "<img src='" . $image->image_location . "' width='100%' height='100%'>" . "<br>";
       ?>
     </div>
-    <?php
+  <?php
   }
 
   ?>
@@ -127,7 +165,7 @@ $product = Product::getProductById($product_id);
     $reviews = Review::getReviewsByProductId($product_id);
     if ($reviews !== null && $reviews->count() > 0) {
       foreach ($reviews->results() as $review) {
-        ?>
+    ?>
         <div class="review">
           <p>
             <?php echo $review->rating ?>/5
@@ -147,15 +185,15 @@ $product = Product::getProductById($product_id);
 
           if ($user->isLoggedIn()) {
             if ($user->data()->user_id == $review->user_id) {
-              ?>
+          ?>
               <a href="manage-review.php?review_id=<?php echo $review->review_id ?>" class="btn btn-primary">Manage</a>
-              <?php
+          <?php
             }
           }
 
           ?>
         </div>
-        <?php
+    <?php
       }
     } else {
       echo "<h3 class='NoReviews'>No reviews for this product yet.</h3>";
