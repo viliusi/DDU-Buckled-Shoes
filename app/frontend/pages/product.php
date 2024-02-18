@@ -32,7 +32,7 @@
 
   .product-details {
     width: 60%;
-    padding: 0 10px;
+    padding: 0 0px;
   }
 
   .product-price {
@@ -121,15 +121,20 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     height: 100%;
     color: black;
   }
 
+  .purchase-box h1 {
+    font-size: 2em;
+    margin-bottom: 0px;
+  }
+
   .slogan-box {
     max-height: 100%;
-    padding: 10px;
-    margin: 20px 0;
+    padding: 25px;
+    margin: 0px 0;
+    font-weight: lighter;
   }
 
   .total-price {
@@ -144,30 +149,13 @@
     margin-bottom: 20px;
   }
 
-  .buttons-box {
-    margin-bottom: 20px;
-  }
-
   .checkout-button {
     font-size: 1.5em;
-    padding: 10px 20px;
     margin-bottom: 10px;
     background-color: #F2C744;
     border-radius: 7.5px;
   }
 
-  .clear-cart-button {
-    font-size: 1.2em;
-    padding: 5px 10px;
-  }
-
-  .small-text {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    font-size: 0.2em;
-    color: black;
-  }
 </style>
 
 <?php
@@ -198,9 +186,9 @@ $product = Product::getProductById($product_id);
         </h1>
 
         <div class="slogan-box">
-          <h2 style="color:black;">
+          <h4 style="color:black;">
             <?php echo $product->description ?>
-          </h2>
+          </h4>
         </div>
 
         <?php
