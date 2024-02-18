@@ -39,3 +39,5 @@
 
 
 </head>
+
+<?php require_once FRONTEND_INCLUDE . 'cookie-popup.php'; ?>
