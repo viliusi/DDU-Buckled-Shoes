@@ -322,7 +322,9 @@ if (!empty($_SESSION['cart'])) {
             $images = Product::getImagesByProductId($product_id);
             foreach ($images->results() as $image) {
               echo "<div class='imageAlignment'>";
+              echo "<a href='product.php?product_id=" . $product_id . "'>";
               echo "<img src='" . $image->image_location . "' style='height: auto; width: 100%; object-fit: contain;'>" . "<br>";
+              echo "</a>";
               echo "</div>";
             }
 
@@ -411,4 +413,3 @@ if (!empty($_SESSION['cart'])) {
   text-align: center;'>Your cart is empty</h3>";
 }
 ?>
-
