@@ -1,41 +1,29 @@
 <style>
-  /* Container for the table */
+  /* General Styles */
   .table-container {
     max-height: 80vh;
-    /* Set a maximum height for the container */
     overflow-y: auto;
-    /* Enable vertical scrolling if content overflows */
   }
 
-  /* Style the table */
   .table-scroll {
     width: 100%;
-    /* Table should take 100% width of its container */
     border-collapse: collapse;
-    /* Remove cell spacing and borders */
   }
 
-  /* Style table headers and cells */
   .table-scroll th,
   .table-scroll td {
     padding: 8px;
-    /* Add padding for better readability */
     text-align: left;
-    /* Adjust text alignment as needed */
     border-bottom: 1px solid #ddd;
-    /* Add a bottom border to cells */
   }
 
+  /* Product Styles */
   .product {
     display: flex;
-    flex-direction: row;
     align-items: center;
     border: 1px solid white;
     padding: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin: 10px 30px;
   }
 
   .imageAlignment {
@@ -44,13 +32,7 @@
 
   .product-details {
     width: 60%;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .product-details h3 {
-    font-size: 1.2em;
-    /* Make title bigger on larger screens */
+    padding: 0 10px;
   }
 
   .product-price {
@@ -60,8 +42,10 @@
     justify-content: center;
   }
 
+  /* Button Styles */
   .decrement-button,
-  .increment-button {
+  .increment-button,
+  .remove-button {
     width: 30px;
     height: 30px;
     padding: 0;
@@ -75,32 +59,27 @@
   }
 
   .remove-button {
-    font-size: 1.2em;
-    height: 30px;
-    padding: 0 10px;
-    border: none;
-    line-height: 30px;
-    vertical-align: middle;
-    border-radius: 5px;
+    width: 70px;
   }
 
+  /* Price Styles */
   .product-price .old-price,
   .product-price .new-price {
     display: inline-block;
-    /* Keep price on the same line on larger screens */
   }
 
   .new-price {
     font-size: 2em;
     font-weight: bold;
-    /* Make the new price text bold */
   }
 
+  /* Custom Horizontal Rule */
   .custom-hr {
     border-color: white;
     border-width: 2px;
   }
 
+  /* Responsive Styles */
   @media (max-width: 599px) {
     .imageAlignment img {
       width: 80%;
@@ -111,25 +90,25 @@
       font-size: 0.8em;
     }
 
-    .product-details h3 {
-      font-size: 0.9em;
-    }
-
     .product-details hr {
       border-width: 1px;
-      /* Make horizontal rule thinner on smaller screens */
+    }
+
+    .table-container {
+      max-height: none;
     }
 
     .product-price .old-price,
     .product-price .new-price {
       display: block;
-      /* Stack price on smaller screens */
+    }
+
+    .product {
+      margin: 5px 5px;
     }
 
     .new-price {
       font-size: 1em;
-      font-weight: bold;
-      /* Make the new price text bold */
     }
 
     .custom-hr {
@@ -137,6 +116,7 @@
     }
   }
 
+  /* Purchase Box Styles */
   .purchase-box {
     text-align: center;
     display: flex;
@@ -146,28 +126,17 @@
     color: black;
   }
 
-  .purchase-box h1 {
-    margin-bottom: 20px;
-  }
-
   .slogan-box {
     max-height: 100%;
     padding: 10px;
     margin: 20px 0;
   }
 
-  .slogan-box h2 {
-    font-size: 1.5em;
-    color: black;
-  }
-
   .total-price {
     font-size: 1.5em;
     margin-bottom: 10px;
     font-weight: bold;
-    /* Make the total price text bold */
     text-decoration: underline;
-    /* Underline the total price text */
   }
 
   .tax-cut {
@@ -374,7 +343,7 @@ if (!empty($_SESSION['cart'])) {
       <div class="purchase-box">
         <h1>Purchase Products</h1>
         <div class="slogan-box">
-          <h2>All our products are made of the finest Taiwanese Children by Taiwanese Children <br>
+          <h2 style="color:black;">All our products are made of the finest Taiwanese Children by Taiwanese Children <br>
             In the case of a defective product returns are always possible*</h2>
         </div>
         <?php
