@@ -213,6 +213,7 @@ if (isset($_POST['remove_from_cart'])) {
   header('Location: cart.php');
   exit;
 }
+
 // Increment quantity of product in cart
 if (isset($_POST['increment_quantity'])) {
   $product_id = $_POST['product_id'];
@@ -305,12 +306,24 @@ if (!empty($_SESSION['cart'])) {
             echo "<hr class='custom-hr'>";
             echo "<p>" . $product->description . "</p>";
 
+            // Fetch the current stock for the product
+            $stock = Product::getStockByVariationId($variation_id);
+
             // Interaction buttons
             echo "<form method='post' action='cart.php'>";
             echo "<input type='hidden' name='product_id' value='" . $product_id . "'>";
             echo "<input type='hidden' name='variation_id' value='" . $variation_id . "'>";
             echo "<input class='decrement-button' type='submit' name='decrement_quantity' value='-'>";
-            echo "<input class='increment-button' type='submit' name='increment_quantity' value='+'>";
+
+            $quantity_in_cart = $_SESSION['cart'][$product_id . "-" . $variation_id]['quantity'];
+
+            // Disable the increment button if there isn't enough stock
+            if ($quantity_in_cart >= $stock) {
+              echo "<input class='increment-button' type='submit' name='increment_quantity' value='+' disabled>";
+            } else {
+              echo "<input class='increment-button' type='submit' name='increment_quantity' value='+'>";
+            }
+
             echo "<input class='remove-button' type='submit' name='remove_from_cart' value='Remove'>";
             echo "</form>";
 
